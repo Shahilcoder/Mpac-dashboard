@@ -3,9 +3,11 @@
 div.sidebar
     background-color: #232323
     color: white
+    padding: 0 1rem
 
     div.sidebar__head
         padding: 1rem
+        padding-top: 1.5rem
         border-bottom: 0.5px solid white
         font-family: 'Roboto', sans-serif
         font-size: 20px
@@ -21,11 +23,12 @@ div.sidebar
             padding: 0.75rem 1rem
             color: white
             text-decoration: none
+            border-radius: 10px
+            transition: 0.5s
         
         a.nav_link:hover
-            background-color: rgba(#0a1630, 0.7)
-            transition: 0.5s
+            padding-left: 2rem
         
         a.nav_link.selected
             background-color: #0a54ff
-            transition: 0s
+            background: linear-gradient(to right, #4f84ff , #0a54ff 50%, #0d4bdd)
