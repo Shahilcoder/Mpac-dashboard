@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
@@ -22,140 +6,126 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
-// Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
+// Date
+import moment from "moment";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-// Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import { groups as g, items as i } from "layouts/dashboard/data/timelineData";
+import { styleItem, styleGroup } from "utils/boxStyling";
+
+// Timeline
+import Timeline from "react-visjs-timeline";
+import { useEffect, useState } from "react";
+
+// material ui
+import { Select, MenuItem, Checkbox, FormControl, OutlinedInput } from "@mui/material";
+
+import './style.scss';
 
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
+  const [items, setItems] = useState(() => {
+    return i.map(item => styleItem(item));
+  });
+  const [groups, setGroups] = useState(() => {
+    return g.map(group => styleGroup(group));
+  });
+  const [selectedGroups, setSelectedGroups] = useState(() => []);
+  const [all, setAll] = useState(() => false);
+  const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
+
+  const options = {
+    stack: false,
+    // start: new Date(2023, 10, 14, 12, 0, 0),
+    // end: new Date(2023, 10, 14, 24, 0, 0),
+    margin: {
+      axis: 2.5,
+      item: 5
+    },
+    min: new Date(2023, 10, 14, 0, 0, 0),
+    max: new Date(2023, 10, 14, 24, 0, 0),
+    editable: false,
+    maxHeight: "70vh",
+    orientation: "top",
+    zoomMin: 3 * 60 * 60 * 1000,
+    zoomMax: 24 * 60 * 60 * 1000
+  };
+
+  useEffect(() => {
+    setSelectedGroups(groups.filter(group => group.checked));
+  }, [groups]);
+
+  const handleSelect = (group_id) => {
+    if (all) setAll(false);
+    setGroups(groups.map(group => {
+      if (group.id === group_id) group.checked = !group.checked;
+      return group;
+    }));
+  }
 
   return (
     <DashboardLayout>
-      {/* <DashboardNavbar />
-      <MDBox py={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
-                }}
-              />
-            </MDBox>
+      <DashboardNavbar />
+      <MDBox pb={2}>
+        <Grid container spacing={2}>
+          <Grid item>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker  value={selectedDate} onChange={setSelectedDate} classes={{ root: 'blueDatePicker' }} />
+            </LocalizationProvider>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
+
+          <Grid item>
+            <FormControl>
+              {/* <InputLabel id="mutiple-checkbox-label">Coach</InputLabel> */}
+              <Select
+                labelId="mutiple-checkbox-label"
+                id="mutiple-checkbox"
+                input={<OutlinedInput />}
+                value={[]}
+                renderValue={(selected) => <em style={{padding: "12px 12px 12px 0px"}}>Select Coaches</em>}
+                multiple
+                displayEmpty
+              >
+                <MenuItem onClick={() => {
+                    setGroups(groups.map(group => { group.checked = !all; return group; }));
+                    setAll(!all);
+                  }}
+                >
+                  <Checkbox checked={all} />
+                  Select All
+                </MenuItem>
+                {groups.map((group) => (
+                  <MenuItem key={group.id} value={group.content} onClick={() => handleSelect(group.id)}>
+                    <Checkbox checked={group.checked} />
+                    {group.content}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
-        <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
-              </MDBox>
-            </Grid>
-          </Grid>
-        </MDBox>
-        <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
-          </Grid>
-        </MDBox>
       </MDBox>
-      <Footer /> */}
+      <MDBox pb={2}>
+        <div className="legend">
+          <div>
+            <div className="legend_normal"></div> Program
+          </div>
+          <div>
+            <div className="legend_buffer"></div> Buffer
+          </div>
+          <div>
+            <div className="legend_office"></div> Office
+          </div>
+          <div>
+            <div className="legend_lunch"></div> Lunch
+          </div>
+          <div>
+            <div className="legend_uae"></div> Program in UAE
+          </div>
+        </div>
+      </MDBox>
+      <Timeline className="timelinecustom" options={options} groups={selectedGroups} items={selectedGroups.length ? items : []} />
     </DashboardLayout>
   );
 }
