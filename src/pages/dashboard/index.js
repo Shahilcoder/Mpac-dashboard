@@ -12,7 +12,7 @@ import moment from "moment";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import { groups as g, items as i } from "layouts/dashboard/data/timelineData";
+import { groups as g, items as i } from "pages/dashboard/data/timelineData";
 import { styleItem, styleGroup } from "utils/boxStyling";
 
 // Timeline
