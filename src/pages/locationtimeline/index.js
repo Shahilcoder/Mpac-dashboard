@@ -69,81 +69,83 @@ function LocationTimelineDashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pb={2}>
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            // border: '2px solid #000',
-            boxShadow: 24,
-            p: 4,
-          }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Select Coach
-            </Typography>
-            <div id="modal-modal-description" sx={{ mt: 2 }}>
-              <FormControl>
-                <Select
-                  labelId="mutiple-checkbox-label"
-                  id="mutiple-checkbox"
-                  input={<OutlinedInput />}
-                  value={"Murad Hesham"}
-                  renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
-                  displayEmpty
-                >
-                  {coaches.map((coach) => (
-                    <MenuItem key={coach.id} value={coach.content}>
-                      {coach.content}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-          </Box>
-        </Modal>
-        <Grid container spacing={2}>
-          <Grid item>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker  value={selectedDate} onChange={setSelectedDate} classes={{ root: 'blueDatePicker' }} />
-            </LocalizationProvider>
+      <div className="locationtimeline">
+        <MDBox pb={2}>
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              // border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Select Coach
+              </Typography>
+              <div id="modal-modal-description" sx={{ mt: 2 }}>
+                <FormControl>
+                  <Select
+                    labelId="mutiple-checkbox-label"
+                    id="mutiple-checkbox"
+                    input={<OutlinedInput />}
+                    value={"Murad Hesham"}
+                    renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
+                    displayEmpty
+                  >
+                    {coaches.map((coach) => (
+                      <MenuItem key={coach.id} value={coach.content}>
+                        {coach.content}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </Box>
+          </Modal>
+          <Grid container spacing={2}>
+            <Grid item>
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker  value={selectedDate} onChange={setSelectedDate} classes={{ root: 'blueDatePicker' }} />
+              </LocalizationProvider>
+            </Grid>
           </Grid>
-        </Grid>
-      </MDBox>
-      <MDBox pb={2}>
-      <div className="legend">
-          <div>
-            <div className="legend_normal"></div> Program
+        </MDBox>
+        <MDBox pb={2}>
+        <div className="legend">
+            <div>
+              <div className="legend_normal"></div> Program
+            </div>
+            <div>
+              <div className="legend_buffer"></div> Buffer
+            </div>
+            <div>
+              <div className="legend_office"></div> Office
+            </div>
+            <div>
+              <div className="legend_lunch"></div> Lunch
+            </div>
+            <div>
+              <div className="legend_dubai"></div> Program in Dubai
+            </div>
+            <div>
+              <div className="legend_sharjah"></div> Program in Sharjah
+            </div>
+            <div>
+              <div className="legend_abudhabi"></div> Program in Abu Dhabi
+            </div>
           </div>
-          <div>
-            <div className="legend_buffer"></div> Buffer
-          </div>
-          <div>
-            <div className="legend_office"></div> Office
-          </div>
-          <div>
-            <div className="legend_lunch"></div> Lunch
-          </div>
-          <div>
-            <div className="legend_dubai"></div> Program in Dubai
-          </div>
-          <div>
-            <div className="legend_sharjah"></div> Program in Sharjah
-          </div>
-          <div>
-            <div className="legend_abudhabi"></div> Program in Abu Dhabi
-          </div>
-        </div>
-      </MDBox>
-      <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} selectHandler={(props) => setOpen(true)} />
+        </MDBox>
+        <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} selectHandler={(props) => setOpen(true)} />
+      </div>
     </DashboardLayout>
   );
 }

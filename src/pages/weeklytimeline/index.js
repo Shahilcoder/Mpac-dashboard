@@ -70,64 +70,65 @@ function WeeklyTimelineDashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pb={2}>
-        <Grid container spacing={2}>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <Grid item>
-              <DatePicker  value={startDate} onChange={setStartDate} classes={{ root: 'blueDatePicker' }} />
-            </Grid>
-            <Grid item>
-              <DatePicker  value={endDate} onChange={setEndDate} classes={{ root: 'blueDatePicker' }} />
-            </Grid>
-          </LocalizationProvider>
+      <div className="weeklytimeline">
+        <MDBox pb={2}>
+          <Grid container spacing={2}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <Grid item>
+                <DatePicker  value={startDate} onChange={setStartDate} classes={{ root: 'blueDatePicker' }} />
+              </Grid>
+              <Grid item>
+                <DatePicker  value={endDate} onChange={setEndDate} classes={{ root: 'blueDatePicker' }} />
+              </Grid>
+            </LocalizationProvider>
 
-          <Grid item>
-            <FormControl>
-              {/* <InputLabel id="mutiple-checkbox-label">Coach</InputLabel> */}
-              <Select
-                labelId="mutiple-checkbox-label"
-                id="mutiple-checkbox"
-                input={<OutlinedInput />}
-                value={"Murad Hesham"}
-                renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
-                displayEmpty
-              >
-                {coaches.map((coach) => (
-                  <MenuItem key={coach.id} value={coach.content}>
-                    {coach.content}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Grid item>
+              <FormControl>
+                <Select
+                  labelId="mutiple-checkbox-label"
+                  id="mutiple-checkbox"
+                  input={<OutlinedInput />}
+                  value={"Murad Hesham"}
+                  renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
+                  displayEmpty
+                >
+                  {coaches.map((coach) => (
+                    <MenuItem key={coach.id} value={coach.content}>
+                      {coach.content}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      </MDBox>
-      <MDBox pb={2}>
-      <div className="legend">
-          <div>
-            <div className="legend_normal"></div> Program
+        </MDBox>
+        <MDBox pb={2}>
+        <div className="legend">
+            <div>
+              <div className="legend_normal"></div> Program
+            </div>
+            <div>
+              <div className="legend_buffer"></div> Buffer
+            </div>
+            <div>
+              <div className="legend_office"></div> Office
+            </div>
+            <div>
+              <div className="legend_lunch"></div> Lunch
+            </div>
+            <div>
+              <div className="legend_dubai"></div> Program in Dubai
+            </div>
+            <div>
+              <div className="legend_sharjah"></div> Program in Sharjah
+            </div>
+            <div>
+              <div className="legend_abudhabi"></div> Program in Abu Dhabi
+            </div>
           </div>
-          <div>
-            <div className="legend_buffer"></div> Buffer
-          </div>
-          <div>
-            <div className="legend_office"></div> Office
-          </div>
-          <div>
-            <div className="legend_lunch"></div> Lunch
-          </div>
-          <div>
-            <div className="legend_dubai"></div> Program in Dubai
-          </div>
-          <div>
-            <div className="legend_sharjah"></div> Program in Sharjah
-          </div>
-          <div>
-            <div className="legend_abudhabi"></div> Program in Abu Dhabi
-          </div>
-        </div>
-      </MDBox>
-      <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} />
+        </MDBox>
+        <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} />
+      </div>
     </DashboardLayout>
   );
 }

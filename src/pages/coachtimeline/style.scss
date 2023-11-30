@@ -1,13 +1,13 @@
 .blueDatePicker {
     // Change the color to blue
     & .MuiInput-underline:before {
-      border-bottom: 2px solid #1976d2 !important;
+    border-bottom: 2px solid #1976d2 !important;
     }
-  
+
     // Change the color of the selected date
     & .Mui-selected {
-      background-color: #1976d2 !important;
-      color: white !important;
+    background-color: #1976d2 !important;
+    color: white !important;
     }
 }
 
@@ -24,40 +24,43 @@
             margin-left: 10px;
             width: 15px;
             height: 15px;
-            // border: 1px solid black;
             border-radius: 0;
         }
 
         .legend_normal {
             margin-left: 0;
-            background-color: #4caf50;
+            background-color: #e3fee4;
+            border: 3px solid #3f9041;
         }
     
         .legend_office {
             background-color: #e5f6fd;
-            border: 1px solid #014361;
+            border: 3px solid #014361;
         }
     
         .legend_lunch {
             background-color: #fff4e5;
-            border: 1px solid #663c00;
+            border: 3px solid #663c00;
         }
 
         .legend_buffer {
-            background-color: #c5c5c5;
-            border: 1px solid #000000;
+            background-color: #dfdfdf;
+            border: 3px solid #000000;
         }
     
         .legend_dubai {
-            background-color: #ff2a2a;
+            background-color: #ffe4e4;
+            border: 3px solid #b11111;
         }
 
         .legend_sharjah {
-            background-color: #e9009f;
+            background-color: #f6cfff;
+            border: 3px solid #8e00ae;
         }
 
         .legend_abudhabi {
-            background-color: #0075e2;
+            background-color: #dff6ff;
+            border: 3px solid #0092c7;
         }
     }
 }
@@ -70,7 +73,7 @@
     padding: 0.5rem;
     line-height: normal;
     font-weight: bold;
-    color: white;
+    // color: white;
     border: 1px solid black;
     border-radius: 0;
     
@@ -109,7 +112,7 @@
 
 .vis-item.timeline_item_buffer {
     padding: 0.5rem;
-    background-color: #c5c5c5; // buffer
+    background-color: #dfdfdf; // buffer
     font-size: 13px;
     line-height: normal;
     font-weight: bold;
@@ -132,17 +135,25 @@
 }
 
 .vis-item.timeline_item {
-    background-color: #4caf50 !important;
+    color: #3f9041;
+    background-color: #e3fee4;
+    border: 1px solid #3f9041;
 }
 
 .vis-item.timeline_item_dubai {
-    background-color: #ff2a2a;
+    color: #b11111;
+    background-color: #ffe4e4;
+    border: 1px solid #b11111;
 }
 
 .vis-item.timeline_item_sharjah {
-    background-color: #e9009f;
+    color: #8e00ae;
+    background-color: #f6cfff;
+    border: 1px solid #8e00ae;
 }
 
 .vis-item.timeline_item_abudhabi {
-    background-color: #0075e2;
+    color: #0092c7;
+    background-color: #dff6ff;
+    border: 1px solid #0092c7;
 }
