@@ -47,7 +47,6 @@ export const styleItem = (item) => {
 export const styleGroup = (group) => {
     return {
         ...group,
-        // checked: false
-        // className: 'mygroup'
+        className: 'school_group'
     }
 };

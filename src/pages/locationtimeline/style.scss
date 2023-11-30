@@ -1,2 +1,16 @@
-// div.locationtimeline {    
-// };
+div.locationtimeline {
+    .school_group {
+        font-size: 14px;
+    }
+
+    .vis-nested-group {
+        border: none !important;
+        border-bottom: 1px solid #bfbfbf !important;
+        border-right: 1px solid #bfbfbf !important;
+        padding: 0 !important;
+    }
+
+    .vis-inner {
+        padding: 0 4px !important;
+    } 
+};
