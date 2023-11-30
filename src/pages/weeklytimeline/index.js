@@ -33,7 +33,8 @@ function WeeklyTimelineDashboard() {
   });
   const [selectedGroups, setSelectedGroups] = useState(() => []);
   const [all, setAll] = useState(() => false);
-  const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
+  const [startDate, setStartDate] = useState(() => moment("2023-11-14"));
+  const [endDate, setEndDate] = useState(() => moment("2023-11-14"));
 
   const options = {
     stack: false,
@@ -69,11 +70,14 @@ function WeeklyTimelineDashboard() {
       <DashboardNavbar />
       <MDBox pb={2}>
         <Grid container spacing={2}>
-          <Grid item>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker  value={selectedDate} onChange={setSelectedDate} classes={{ root: 'blueDatePicker' }} />
-            </LocalizationProvider>
-          </Grid>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <Grid item>
+              <DatePicker  value={startDate} onChange={setStartDate} classes={{ root: 'blueDatePicker' }} />
+            </Grid>
+            <Grid item>
+              <DatePicker  value={endDate} onChange={setEndDate} classes={{ root: 'blueDatePicker' }} />
+            </Grid>
+          </LocalizationProvider>
 
           <Grid item>
             <FormControl>
@@ -107,7 +111,7 @@ function WeeklyTimelineDashboard() {
         </Grid>
       </MDBox>
       <MDBox pb={2}>
-        <div className="legend">
+      <div className="legend">
           <div>
             <div className="legend_normal"></div> Program
           </div>
@@ -121,7 +125,13 @@ function WeeklyTimelineDashboard() {
             <div className="legend_lunch"></div> Lunch
           </div>
           <div>
-            <div className="legend_uae"></div> Program in UAE
+            <div className="legend_dubai"></div> Program in Dubai
+          </div>
+          <div>
+            <div className="legend_sharjah"></div> Program in Sharjah
+          </div>
+          <div>
+            <div className="legend_abudhabi"></div> Program in Abu Dhabi
           </div>
         </div>
       </MDBox>

@@ -107,7 +107,7 @@ function LocationTimelineDashboard() {
         </Grid>
       </MDBox>
       <MDBox pb={2}>
-        <div className="legend">
+      <div className="legend">
           <div>
             <div className="legend_normal"></div> Program
           </div>
@@ -121,7 +121,13 @@ function LocationTimelineDashboard() {
             <div className="legend_lunch"></div> Lunch
           </div>
           <div>
-            <div className="legend_uae"></div> Program in UAE
+            <div className="legend_dubai"></div> Program in Dubai
+          </div>
+          <div>
+            <div className="legend_sharjah"></div> Program in Sharjah
+          </div>
+          <div>
+            <div className="legend_abudhabi"></div> Program in Abu Dhabi
           </div>
         </div>
       </MDBox>

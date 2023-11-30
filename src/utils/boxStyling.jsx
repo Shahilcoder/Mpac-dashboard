@@ -1,29 +1,15 @@
 export const styleItem = (item) => {
-    if (item._type === "office") {
+    if (["office", "buffer", "lunch"].includes(item._type)) {
         return {
             ...item,
-            className: "timeline_item_office",
-            content: "Office"
+            className: `timeline_item_${item._type}`,
+            content: item._type[0].toUpperCase() + item._type.substr(1)
         };
     }
-    else if (item._type === "buffer") {
+    else if (["dubai", "sharjah", "abudhabi"].includes(item._type)) {
         return {
             ...item,
-            className: "timeline_item_buffer",
-            content: "Buffer"
-        }
-    }
-    else if (item._type === "lunch") {
-        return {
-            ...item,
-            className: "timeline_item_lunch",
-            content: "Lunch"
-        };
-    }
-    else if (item._type === "uae") {
-        return {
-            ...item,
-            className: "timeline_item_uae",
+            className: `timeline_item_${item._type}`,
             content: `<div>
                 <div>
                     <div>${item.data.school}</div>
