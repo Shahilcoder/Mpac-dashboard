@@ -12,7 +12,7 @@ import moment from "moment";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import { groups as g, items as i } from "./data/timelineData";
+import { coaches, groups as g, items as i } from "./data/timelineData";
 import { styleItem, styleGroup } from "utils/boxStyling";
 
 // Timeline
@@ -20,7 +20,7 @@ import Timeline from "react-visjs-timeline";
 import { useEffect, useState } from "react";
 
 // material ui
-import { Select, MenuItem, Checkbox, FormControl, OutlinedInput } from "@mui/material";
+import { Select, MenuItem, FormControl, OutlinedInput } from "@mui/material";
 
 import './style.scss';
 
@@ -31,12 +31,14 @@ function WeeklyTimelineDashboard() {
   const [groups, setGroups] = useState(() => {
     return g.map(group => styleGroup(group));
   });
-  const [selectedGroups, setSelectedGroups] = useState(() => []);
-  const [all, setAll] = useState(() => false);
+  // const [selectedGroups, setSelectedGroups] = useState(() => []);
+  // const [all, setAll] = useState(() => false);
   const [startDate, setStartDate] = useState(() => moment("2023-11-14"));
-  const [endDate, setEndDate] = useState(() => moment("2023-11-14"));
+  const [endDate, setEndDate] = useState(() => moment("2023-11-21"));
 
   const options = {
+    showCurrentTime: false,
+    showMajorLabels: false,
     stack: false,
     // start: new Date(2023, 10, 14, 12, 0, 0),
     // end: new Date(2023, 10, 14, 24, 0, 0),
@@ -53,17 +55,17 @@ function WeeklyTimelineDashboard() {
     zoomMax: 24 * 60 * 60 * 1000
   };
 
-  useEffect(() => {
-    setSelectedGroups(groups.filter(group => group.checked));
-  }, [groups]);
+  // useEffect(() => {
+  //   setSelectedGroups(groups.filter(group => group.checked));
+  // }, [groups]);
 
-  const handleSelect = (group_id) => {
-    if (all) setAll(false);
-    setGroups(groups.map(group => {
-      if (group.id === group_id) group.checked = !group.checked;
-      return group;
-    }));
-  }
+  // const handleSelect = (group_id) => {
+  //   if (all) setAll(false);
+  //   setGroups(groups.map(group => {
+  //     if (group.id === group_id) group.checked = !group.checked;
+  //     return group;
+  //   }));
+  // }
 
   return (
     <DashboardLayout>
@@ -86,23 +88,13 @@ function WeeklyTimelineDashboard() {
                 labelId="mutiple-checkbox-label"
                 id="mutiple-checkbox"
                 input={<OutlinedInput />}
-                value={[]}
-                renderValue={(selected) => <em style={{padding: "12px 12px 12px 0px"}}>Select Coaches</em>}
-                multiple
+                value={"Murad Hesham"}
+                renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
                 displayEmpty
               >
-                <MenuItem onClick={() => {
-                    setGroups(groups.map(group => { group.checked = !all; return group; }));
-                    setAll(!all);
-                  }}
-                >
-                  <Checkbox checked={all} />
-                  Select All
-                </MenuItem>
-                {groups.map((group) => (
-                  <MenuItem key={group.id} value={group.content} onClick={() => handleSelect(group.id)}>
-                    <Checkbox checked={group.checked} />
-                    {group.content}
+                {coaches.map((coach) => (
+                  <MenuItem key={coach.id} value={coach.content}>
+                    {coach.content}
                   </MenuItem>
                 ))}
               </Select>
@@ -135,7 +127,7 @@ function WeeklyTimelineDashboard() {
           </div>
         </div>
       </MDBox>
-      <Timeline className="timelinecustom" options={options} groups={selectedGroups} items={selectedGroups.length ? items : []} />
+      <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} />
     </DashboardLayout>
   );
 }

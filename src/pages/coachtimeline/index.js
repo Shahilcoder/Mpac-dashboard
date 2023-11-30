@@ -36,6 +36,7 @@ function CoachTimelineDashboard() {
   const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
 
   const options = {
+    showCurrentTime: false,
     stack: false,
     // start: new Date(2023, 10, 14, 12, 0, 0),
     // end: new Date(2023, 10, 14, 24, 0, 0),
