@@ -27,8 +27,8 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React example components
-import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
+import Sidenav from "components/Sidenav";
+import Configurator from "components/Configurator";
 
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
@@ -167,7 +167,7 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/coach" />} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>

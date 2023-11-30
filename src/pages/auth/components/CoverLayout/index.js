@@ -24,7 +24,7 @@ import MDBox from "components/MDBox";
 // import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
-import PageLayout from "examples/LayoutContainers/PageLayout";
+import PageLayout from "components/LayoutContainers/PageLayout";
 
 function CoverLayout({ coverHeight, image, children }) {
   return (

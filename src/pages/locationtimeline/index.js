@@ -24,7 +24,7 @@ import { Select, MenuItem, Checkbox, FormControl, OutlinedInput } from "@mui/mat
 
 import './style.scss';
 
-function CoachTimelineDashboard() {
+function LocationTimelineDashboard() {
   const [items, setItems] = useState(() => {
     return i.map(item => styleItem(item));
   });
@@ -130,4 +130,4 @@ function CoachTimelineDashboard() {
   );
 }
 
-export default CoachTimelineDashboard;
+export default LocationTimelineDashboard;

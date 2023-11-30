@@ -37,6 +37,8 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import CoachTimelineDashboard from "pages/coachtimeline";
+import WeeklyTimelineDashboard from "pages/weeklytimeline";
+import LocationTimelineDashboard from "pages/locationtimeline";
 import SignIn from "pages/auth/sign-in";
 import SignUp from "pages/auth/sign-up";
 
@@ -58,7 +60,7 @@ const routes = [
     key: "weekly",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/weekly",
-    component: <CoachTimelineDashboard />,
+    component: <WeeklyTimelineDashboard />,
   },
   {
     type: "collapse",
@@ -66,7 +68,7 @@ const routes = [
     key: "location",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/location",
-    component: <CoachTimelineDashboard />,
+    component: <LocationTimelineDashboard />,
   },
   {
     // type: "collapse",
