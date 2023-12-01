@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const styleItem = (item) => {
     if (["office", "buffer", "lunch"].includes(item._type)) {
         return {
@@ -18,8 +20,9 @@ export const styleItem = (item) => {
 
                 <div>
                     <div>${item.data.program}</div>
-                    <div>${item.data.class_type}</div>
-                    <div>${item.data.level}</div>
+                    <div>level: ${item.data.level}</div>
+                    <div>age group: ${item.data.age_group}</div>
+                    <div>${moment(item.start).format('hh:mm a')} - ${moment(item.end).format('hh:mm a')}</div>
                 </div>
             </div>`
         }
@@ -36,8 +39,9 @@ export const styleItem = (item) => {
 
                 <div>
                     <div>${item.data.program}</div>
-                    <div>${item.data.class_type}</div>
-                    <div>${item.data.level}</div>
+                    <div>level: ${item.data.level}</div>
+                    <div>age group: ${item.data.age_group}</div>
+                    <div>${moment(item.start).format('hh:mm a')} - ${moment(item.end).format('hh:mm a')}</div>
                 </div>
             </div>`
         }

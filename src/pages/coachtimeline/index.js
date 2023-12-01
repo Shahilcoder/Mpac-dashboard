@@ -12,8 +12,8 @@ import moment from "moment";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import { groups as g, items as i } from "./data/timelineData";
-import { styleItem, styleGroup } from "utils/boxStyling";
+import { coaches as c, programs as p } from "./data/timelineData";
+import { styleItem, styleGroup } from "utils/coachBoxStyling";
 
 // Timeline
 import Timeline from "react-visjs-timeline";
@@ -25,20 +25,23 @@ import { Select, MenuItem, Checkbox, FormControl, OutlinedInput } from "@mui/mat
 import './style.scss';
 
 function CoachTimelineDashboard() {
-  const [items, setItems] = useState(() => {
-    return i.map(item => styleItem(item));
+  const [programs] = useState(() => {
+    return p.map(program => styleItem(program));
   });
-  const [groups, setGroups] = useState(() => {
-    return g.map(group => styleGroup(group));
+  const [coaches, setCoaches] = useState(() => {
+    return c.map(coach => styleGroup(coach));
   });
-  const [selectedGroups, setSelectedGroups] = useState(() => []);
+
+  const [selectedCoaches, setSelectedCoaches] = useState(() => []);
+
   const [all, setAll] = useState(() => false);
+
   const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
 
   const options = {
     showCurrentTime: false,
     stack: false,
-    // start: new Date(2023, 10, 14, 12, 0, 0),
+    start: new Date(2023, 10, 14, 10, 0, 0),
     // end: new Date(2023, 10, 14, 24, 0, 0),
     margin: {
       axis: 2.5,
@@ -46,22 +49,28 @@ function CoachTimelineDashboard() {
     },
     min: new Date(2023, 10, 14, 0, 0, 0),
     max: new Date(2023, 10, 14, 24, 0, 0),
+    format: {
+      minorLabels: {
+        hour: "hh:mm a",
+        minute: "hh:mm a"
+      }
+    },
     editable: false,
     maxHeight: "70vh",
     orientation: "top",
-    zoomMin: 3 * 60 * 60 * 1000,
+    zoomMin: 2.2 * 60 * 60 * 1000,
     zoomMax: 24 * 60 * 60 * 1000
   };
 
   useEffect(() => {
-    setSelectedGroups(groups.filter(group => group.checked));
-  }, [groups]);
+    setSelectedCoaches(coaches.filter(coach => coach.checked));
+  }, [coaches]);
 
-  const handleSelect = (group_id) => {
+  const handleSelect = (coach_id) => {
     if (all) setAll(false);
-    setGroups(groups.map(group => {
-      if (group.id === group_id) group.checked = !group.checked;
-      return group;
+    setCoaches(coaches.map(coach => {
+      if (coach.id === coach_id) coach.checked = !coach.checked;
+      return coach;
     }));
   }
 
@@ -79,7 +88,6 @@ function CoachTimelineDashboard() {
 
             <Grid item>
               <FormControl>
-                {/* <InputLabel id="mutiple-checkbox-label">Coach</InputLabel> */}
                 <Select
                   labelId="mutiple-checkbox-label"
                   id="mutiple-checkbox"
@@ -90,17 +98,17 @@ function CoachTimelineDashboard() {
                   displayEmpty
                 >
                   <MenuItem onClick={() => {
-                      setGroups(groups.map(group => { group.checked = !all; return group; }));
+                      setCoaches(coaches.map(coach => { coach.checked = !all; return coach; }));
                       setAll(!all);
                     }}
                   >
                     <Checkbox checked={all} />
                     Select All
                   </MenuItem>
-                  {groups.map((group) => (
-                    <MenuItem key={group.id} value={group.content} onClick={() => handleSelect(group.id)}>
-                      <Checkbox checked={group.checked} />
-                      {group.content}
+                  {coaches.map(coach => (
+                    <MenuItem key={coach.id} value={coach.content} onClick={() => handleSelect(coach.id)}>
+                      <Checkbox checked={coach.checked} />
+                      {coach.content}
                     </MenuItem>
                   ))}
                 </Select>
@@ -133,7 +141,7 @@ function CoachTimelineDashboard() {
             </div>
           </div>
         </MDBox>
-        <Timeline className="timelinecustom" options={options} groups={selectedGroups} items={selectedGroups.length ? items : []} />
+        <Timeline options={options} groups={selectedCoaches.length ? selectedCoaches : [{id: 0, content: ""}]} items={selectedCoaches.length ? programs : []} />
       </div>
     </DashboardLayout>
   );

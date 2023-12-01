@@ -15,7 +15,7 @@ export const coaches = [
     { id: 11, content: "Majille Malijon" }
 ];
 
-export const groups = [
+export const weeks = [
     { id: 0, content: "Sunday" },
     { id: 1, content: "Monday" },
     { id: 2, content: "Tuesday" },
@@ -25,7 +25,7 @@ export const groups = [
     { id: 6, content: "Saturday" }
 ];
 
-export const items = [
+export const programs = [
     { 'id': 37, 'group': 0, 'start': "2023-11-14 12:30:00", 'end': "2023-11-14 14:30:00", _type: "office" },
     { 'id': 36, 'group': 0, 'start': "2023-11-14 15:30:00", 'end': "2023-11-14 16:00:00", _type: "lunch" },
     { 'id': 0, 'group': 0, 'data': { 'school': 'Amity School', 'court': 'Sports Hall Court 1', 'program': 'Youth Academy', 'class_type': 'Youth Mixed', 'level': 'Beg', 'seats_taken': 3, 'age_group': '5 - 7', 'term': 'Term 1a' }, 'start': "2023-11-14 16:30:00", 'end': "2023-11-14 17:30:00", _type: "dubai" },

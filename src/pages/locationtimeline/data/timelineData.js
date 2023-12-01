@@ -47,7 +47,7 @@ export const locations = [
     { 'id': 31, 'content': 'Multipurpose Hall' }
 ];
 
-export const items = [
+export const programs = [
     {
         id: 37,
         group: 10,

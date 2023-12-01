@@ -1,6 +1,4 @@
-// import moment from 'moment'
-
-export const groups = [
+export const coaches = [
     { id: 0, content: "Murad Hesham" },
     { id: 1, content: "Brian Kasumba" },
     { id: 2, content: "Majille Malijan" },
@@ -12,20 +10,10 @@ export const groups = [
     { id: 8, content: "Godfrey Odong" },
     { id: 9, content: "Abdoulaye Diallo" },
     { id: 10, content: "Lamine Ndiaye" },
-    { id: 11, content: "Majille Malijon" },
-    // { id: 12 , content: "Liam Wattson" },
-    // { id: 13 , content: "Olivia Wattson" },
-    // { id: 14 , content: "Noah Wattson" },
-    // { id: 15 , content: "Emma Wattson" },
-    // { id: 16 , content: "Sophia Wattson" },
-    // { id: 17 , content: "Jackson Wattson" },
-    // { id: 18 , content: "Ava Wattson" },
-    // { id: 19 , content: "Lucas Wattson" },
-    // { id: 20 , content: "Isabella Wattson" },
-    // { id: 21 , content: "Mia Wattson" }
+    { id: 11, content: "Majille Malijon" }
 ];
 
-export const items = [
+export const programs = [
     { 'id': 37, 'group': 0, 'start': "2023-11-14 12:30:00", 'end': "2023-11-14 14:30:00", _type: "office" },
     { 'id': 36, 'group': 0, 'start': "2023-11-14 15:30:00", 'end': "2023-11-14 16:00:00", _type: "lunch" },
     { 'id': 0, 'group': 0, 'data': { 'school': 'Amity School', 'court': 'Sports Hall Court 1', 'program': 'Youth Academy', 'class_type': 'Youth Mixed', 'level': 'Beg', 'seats_taken': 3, 'age_group': '5 - 7', 'term': 'Term 1a' }, 'start': "2023-11-14 16:30:00", 'end': "2023-11-14 17:30:00", _type: "dubai" },

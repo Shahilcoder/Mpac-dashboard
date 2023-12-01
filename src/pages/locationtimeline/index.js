@@ -12,32 +12,32 @@ import moment from "moment";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import { coaches, locations as g, items as i } from "./data/timelineData";
+import { coaches, locations as g, programs as p } from "./data/timelineData";
 import { styleItem, styleGroup } from "utils/locationBoxStyle";
 
 // Timeline
 import Timeline from "react-visjs-timeline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // material ui
-import { Select, MenuItem, Checkbox, FormControl, OutlinedInput } from "@mui/material";
+import { Select, MenuItem, FormControl, OutlinedInput } from "@mui/material";
 import { Modal, Box, Typography } from "@mui/material";
 
 import './style.scss';
 
 function LocationTimelineDashboard() {
-  const [items, setItems] = useState(() => {
-    return i.map(item => styleItem(item));
+  const [programs] = useState(() => {
+    return p.map(program => styleItem(program));
   });
-  const [groups, setGroups] = useState(() => {
+  const [groups] = useState(() => {
     return g.map(group => styleGroup(group));
   });
-  // const [selectedGroups, setSelectedGroups] = useState(() => []);
-  // const [all, setAll] = useState(() => false);
+
   const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
   const [open, setOpen] = useState(() => false);
 
   const options = {
+    showCurrentTime: false,
     stack: false,
     // start: new Date(2023, 10, 14, 12, 0, 0),
     // end: new Date(2023, 10, 14, 24, 0, 0),
@@ -47,24 +47,18 @@ function LocationTimelineDashboard() {
     },
     min: new Date(2023, 10, 14, 0, 0, 0),
     max: new Date(2023, 10, 14, 24, 0, 0),
+    format: {
+      minorLabels: {
+        hour: "hh:mm a",
+        minute: "hh:mm a"
+      }
+    },
     editable: false,
     maxHeight: "70vh",
     orientation: "top",
-    zoomMin: 3 * 60 * 60 * 1000,
+    zoomMin: 2.2 * 60 * 60 * 1000,
     zoomMax: 24 * 60 * 60 * 1000
   };
-
-  // useEffect(() => {
-  //   setSelectedGroups(groups.filter(group => group.checked));
-  // }, [groups]);
-
-  // const handleSelect = (group_id) => {
-  //   if (all) setAll(false);
-  //   setGroups(groups.map(group => {
-  //     if (group.id === group_id) group.checked = !group.checked;
-  //     return group;
-  //   }));
-  // }
 
   return (
     <DashboardLayout>
@@ -144,7 +138,7 @@ function LocationTimelineDashboard() {
             </div>
           </div>
         </MDBox>
-        <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} selectHandler={(props) => setOpen(true)} />
+        <Timeline options={options} groups={groups} items={groups.length ? programs : []} selectHandler={(props) => setOpen(true)} />
       </div>
     </DashboardLayout>
   );

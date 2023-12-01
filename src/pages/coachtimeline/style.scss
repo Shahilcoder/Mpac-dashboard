@@ -20,15 +20,15 @@
         align-items: center;
 
         div[class^=legend_] {
-            margin-right: 2px;
-            margin-left: 10px;
+            margin-right: 5px;
+            margin-left: 2rem;
             width: 15px;
             height: 15px;
             border-radius: 0;
         }
 
         .legend_normal {
-            margin-left: 0;
+            margin-left: 0 !important;
             background-color: #e3fee4;
             border: 3px solid #3f9041;
         }
@@ -107,7 +107,7 @@
     color: #014361; // office
     border: 1px solid #014361;
     border-radius: 0;
-    height: 99px;
+    height: 111px;
 }
 
 .vis-item.timeline_item_buffer {
@@ -119,7 +119,7 @@
     color: #000000; // buffer
     border: 1px solid #000000;
     border-radius: 0;
-    height: 99px;
+    height: 111px;
 }
 
 .vis-item.timeline_item_lunch {
@@ -131,29 +131,29 @@
     color: #663c00; // lunch
     border: 1px solid #663c00;
     border-radius: 0;
-    height: 99px;
+    height: 111px;
 }
 
 .vis-item.timeline_item {
-    color: #3f9041;
+    // color: #3f9041;
     background-color: #e3fee4;
     border: 1px solid #3f9041;
 }
 
 .vis-item.timeline_item_dubai {
-    color: #b11111;
+    // color: #b11111;
     background-color: #ffe4e4;
     border: 1px solid #b11111;
 }
 
 .vis-item.timeline_item_sharjah {
-    color: #8e00ae;
+    // color: #8e00ae;
     background-color: #f6cfff;
     border: 1px solid #8e00ae;
 }
 
 .vis-item.timeline_item_abudhabi {
-    color: #0092c7;
+    // color: #0092c7;
     background-color: #dff6ff;
     border: 1px solid #0092c7;
 }

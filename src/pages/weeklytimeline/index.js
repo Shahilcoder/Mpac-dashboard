@@ -12,12 +12,12 @@ import moment from "moment";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
-import { coaches, groups as g, items as i } from "./data/timelineData";
-import { styleItem, styleGroup } from "utils/boxStyling";
+import { coaches, weeks as w, programs as p } from "./data/timelineData";
+import { styleItem, styleGroup } from "utils/weeklyBoxStyling";
 
 // Timeline
 import Timeline from "react-visjs-timeline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // material ui
 import { Select, MenuItem, FormControl, OutlinedInput } from "@mui/material";
@@ -25,14 +25,13 @@ import { Select, MenuItem, FormControl, OutlinedInput } from "@mui/material";
 import './style.scss';
 
 function WeeklyTimelineDashboard() {
-  const [items, setItems] = useState(() => {
-    return i.map(item => styleItem(item));
+  const [programs] = useState(() => {
+    return p.map(program => styleItem(program));
   });
-  const [groups, setGroups] = useState(() => {
-    return g.map(group => styleGroup(group));
+  const [weeks] = useState(() => {
+    return w.map(week => styleGroup(week));
   });
-  // const [selectedGroups, setSelectedGroups] = useState(() => []);
-  // const [all, setAll] = useState(() => false);
+
   const [startDate, setStartDate] = useState(() => moment("2023-11-14"));
   const [endDate, setEndDate] = useState(() => moment("2023-11-21"));
 
@@ -48,24 +47,18 @@ function WeeklyTimelineDashboard() {
     },
     min: new Date(2023, 10, 14, 0, 0, 0),
     max: new Date(2023, 10, 14, 24, 0, 0),
+    format: {
+      minorLabels: {
+        hour: "hh:mm a",
+        minute: "hh:mm a"
+      }
+    },
     editable: false,
     maxHeight: "70vh",
     orientation: "top",
-    zoomMin: 3 * 60 * 60 * 1000,
+    zoomMin: 2.3 * 60 * 60 * 1000,
     zoomMax: 24 * 60 * 60 * 1000
   };
-
-  // useEffect(() => {
-  //   setSelectedGroups(groups.filter(group => group.checked));
-  // }, [groups]);
-
-  // const handleSelect = (group_id) => {
-  //   if (all) setAll(false);
-  //   setGroups(groups.map(group => {
-  //     if (group.id === group_id) group.checked = !group.checked;
-  //     return group;
-  //   }));
-  // }
 
   return (
     <DashboardLayout>
@@ -127,7 +120,7 @@ function WeeklyTimelineDashboard() {
             </div>
           </div>
         </MDBox>
-        <Timeline className="timelinecustom" options={options} groups={groups} items={groups.length ? items : []} />
+        <Timeline options={options} groups={weeks} items={weeks.length ? programs : []} />
       </div>
     </DashboardLayout>
   );
