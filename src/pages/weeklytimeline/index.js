@@ -35,6 +35,8 @@ function WeeklyTimelineDashboard() {
   const [startDate, setStartDate] = useState(() => moment("2023-11-14"));
   const [endDate, setEndDate] = useState(() => moment("2023-11-21"));
 
+  const [selectedCoach, setSelectedCoach] = useState(() => "Select Coach");
+
   const options = {
     showCurrentTime: false,
     showMajorLabels: false,
@@ -81,9 +83,10 @@ function WeeklyTimelineDashboard() {
                   labelId="mutiple-checkbox-label"
                   id="mutiple-checkbox"
                   input={<OutlinedInput />}
-                  value={"Murad Hesham"}
-                  renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
-                  displayEmpty
+                  value={selectedCoach}
+                  renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>{selected}</div>}
+                  onChange={(e) => setSelectedCoach(e.target.value)}
+                  // displayEmpty
                 >
                   {coaches.map((coach) => (
                     <MenuItem key={coach.id} value={coach.content}>

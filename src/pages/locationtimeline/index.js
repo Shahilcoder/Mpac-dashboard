@@ -36,6 +36,8 @@ function LocationTimelineDashboard() {
   const [selectedDate, setSelectedDate] = useState(() => moment("2023-11-14"));
   const [open, setOpen] = useState(() => false);
 
+  const [selectedCoach, setSelectedCoach] = useState(() => "Select Coach");
+
   const options = {
     showCurrentTime: false,
     stack: false,
@@ -91,9 +93,9 @@ function LocationTimelineDashboard() {
                     labelId="mutiple-checkbox-label"
                     id="mutiple-checkbox"
                     input={<OutlinedInput />}
-                    value={"Murad Hesham"}
-                    renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>Murad Hesham</div>}
-                    displayEmpty
+                    value={selectedCoach}
+                    renderValue={(selected) => <div style={{padding: "12px 12px 12px 0px"}}>{selected}</div>}
+                    onChange={(e) => setSelectedCoach(e.target.value)}
                   >
                     {coaches.map((coach) => (
                       <MenuItem key={coach.id} value={coach.content}>
