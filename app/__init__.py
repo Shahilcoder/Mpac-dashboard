@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
-from .routes import auth
+from .routes import auth, algo
 from . import config
 
 def create_app():
@@ -17,5 +17,6 @@ def create_app():
         return "Schedule Backend"
     
     app.register_blueprint(auth)
+    app.register_blueprint(algo)
 
     return app
