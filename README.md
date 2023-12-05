@@ -3,3 +3,5 @@
 This project uses `pipenv` please refer to the [docs](https://pipenv.pypa.io/en/latest/).
 
 But you can also switch to normal `virtualenv` based virtual environments and use the provided `requirements.txt` file. Just remember to name virtual environment folder with name `.venv`.
+
+You can import the `thunder.json` file into thunder-client extension of vscode to get access to various api routes, as the api documentation.
