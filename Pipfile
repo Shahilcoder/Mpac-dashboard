@@ -10,6 +10,12 @@ flask-jwt-extended = "*"
 pymongo = "*"
 bcrypt = "*"
 python-dotenv = "*"
+scipy = "*"
+pandas = "*"
+numpy = "*"
+haversine = "*"
+requests = "*"
+openpyxl = "*"
 
 [dev-packages]
 
