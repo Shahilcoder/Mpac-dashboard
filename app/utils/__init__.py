@@ -2,6 +2,8 @@ import random
 import datetime
 
 from .helper_functions import *
+import warnings
+warnings.filterwarnings('ignore')
 
 class Event:
     def __init__(self, type, start_time, end_time,latitude,longitude,location_acronym,court_location):
@@ -85,23 +87,51 @@ def convert(file):
                     continue
                 non_overlapping_time_windows = [tw for tw in coach_schedule if not (tw in overlapping_time_windows)]
                 start_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['Start Time'])
+                end_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['End Time'])
                 # Any Program before the current program that has been completed
-                time_window = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
-                if time_window:
-                    last_location_lat = time_window.latitude
-                    last_location_lon = time_window.longitude
-                    travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                    available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window.end_time)).total_seconds() / 60
-                    if available_time_to_reach >= travel_time_to_reach:
-                        second_filtered_coaches_curr_program.append(coach)
-                        times_to_reach_curr_program.append(travel_time_to_reach)
+                time_window_before = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
+                time_window_after = min((tw for tw in non_overlapping_time_windows if tw.start_time >= row['End Time']), default=None, key=lambda tw: (datetime.datetime.combine(datetime.datetime.today(), tw.start_time) - end_time_datetime).total_seconds())
+                if time_window_before:
+                    if time_window_after:
+                        last_location_lat = time_window_before.latitude
+                        last_location_lon = time_window_before.longitude
+                        next_location_lat = time_window_after.latitude
+                        next_location_lon = time_window_after.longitude
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                        available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                        available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                        if available_time_to_reach >= travel_time_to_reach and available_time_to_depart>=travel_time_to_depart:
+                            second_filtered_coaches_curr_program.append(coach)
+                            times_to_reach_curr_program.append(travel_time_to_reach)
+                    else:
+                        last_location_lat = time_window_before.latitude
+                        last_location_lon = time_window_before.longitude
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                        if available_time_to_reach >= travel_time_to_reach:
+                            second_filtered_coaches_curr_program.append(coach)
+                            times_to_reach_curr_program.append(travel_time_to_reach)
+                        
                     # print(coach,'C',second_filtered_coaches_curr_program,times_to_reach_curr_program)
                 else:
-                    second_filtered_coaches_curr_program.append(coach)
-                    last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
-                    last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
-                    travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                    times_to_reach_curr_program.append(travel_time_to_reach)
+                    if time_window_after:
+                        next_location_lat = time_window_after.latitude
+                        next_location_lon = time_window_after.longitude
+                        travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                        available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                        if available_time_to_depart>=travel_time_to_depart:
+                            second_filtered_coaches_curr_program.append(coach)
+                            last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                            last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                            travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                            times_to_reach_curr_program.append(travel_time_to_reach)
+                    else:
+                        second_filtered_coaches_curr_program.append(coach)
+                        last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                        last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        times_to_reach_curr_program.append(travel_time_to_reach)
                     # print(coach,'D',second_filtered_coaches_curr_program,times_to_reach_curr_program)            
         sorted_coaches_times_to_reach = sorted(zip(second_filtered_coaches_curr_program, times_to_reach_curr_program), key=lambda x: x[1])
 
@@ -121,7 +151,9 @@ def convert(file):
             coach_travel_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
             coach_job_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']
             coach_total_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']+df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
-
+        # if count==10:
+        #     break
+        # count+=1
     all_coaches_total_time = sum(coach_total_time_dict.values())
     all_coaches_travel_time = sum(coach_travel_time_dict.values())
     all_coaches_job_time = sum(coach_job_time_dict.values())
@@ -167,22 +199,49 @@ def convert(file):
                     non_overlapping_time_windows = [tw for tw in coach_schedule if not (tw in overlapping_time_windows)]
                     start_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['Start Time'])
                     # Any Program before the current program that has been completed
-                    time_window = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
-                    if time_window:
-                        last_location_lat = time_window.latitude
-                        last_location_lon = time_window.longitude
-                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                        available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window.end_time)).total_seconds() / 60
-                        if available_time_to_reach >= travel_time_to_reach:
-                            second_filtered_coaches_curr_program.append(coach)
-                            times_to_reach_curr_program.append(travel_time_to_reach)
+                    time_window_before = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
+                    time_window_after = min((tw for tw in non_overlapping_time_windows if tw.start_time >= row['End Time']), default=None, key=lambda tw: (datetime.datetime.combine(datetime.datetime.today(), tw.start_time) - end_time_datetime).total_seconds())
+                    if time_window_before:
+                        if time_window_after:
+                            last_location_lat = time_window_before.latitude
+                            last_location_lon = time_window_before.longitude
+                            next_location_lat = time_window_after.latitude
+                            next_location_lon = time_window_after.longitude
+                            travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                            travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                            available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                            available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                            if available_time_to_reach >= travel_time_to_reach and available_time_to_depart>=travel_time_to_depart:
+                                second_filtered_coaches_curr_program.append(coach)
+                                times_to_reach_curr_program.append(travel_time_to_reach)
+                        else:
+                            last_location_lat = time_window_before.latitude
+                            last_location_lon = time_window_before.longitude
+                            travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                            available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                            if available_time_to_reach >= travel_time_to_reach:
+                                second_filtered_coaches_curr_program.append(coach)
+                                times_to_reach_curr_program.append(travel_time_to_reach)
+                            
                         # print(coach,'C',second_filtered_coaches_curr_program,times_to_reach_curr_program)
                     else:
-                        second_filtered_coaches_curr_program.append(coach)
-                        last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
-                        last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
-                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                        times_to_reach_curr_program.append(travel_time_to_reach)
+                        if time_window_after:
+                            next_location_lat = time_window_after.latitude
+                            next_location_lon = time_window_after.longitude
+                            travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                            available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                            if available_time_to_depart>=travel_time_to_depart:
+                                second_filtered_coaches_curr_program.append(coach)
+                                last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                                last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                                travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                                times_to_reach_curr_program.append(travel_time_to_reach)
+                        else:
+                            second_filtered_coaches_curr_program.append(coach)
+                            last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                            last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                            travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                            times_to_reach_curr_program.append(travel_time_to_reach)
                         # print(coach,'D',second_filtered_coaches_curr_program,times_to_reach_curr_program)            
             sorted_coaches_times_to_reach = sorted(zip(second_filtered_coaches_curr_program, times_to_reach_curr_program), key=lambda x: x[1])
 
@@ -202,6 +261,9 @@ def convert(file):
                 coach_travel_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
                 coach_job_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']
                 coach_total_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']+df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+            # if count==10:
+            #     break
+            # count+=1
         all_coaches_total_time = sum(coach_total_time_dict.values())
         all_coaches_travel_time = sum(coach_travel_time_dict.values())
         all_coaches_job_time = sum(coach_job_time_dict.values())
@@ -209,7 +271,7 @@ def convert(file):
         new_simulation = {'total_job_time': all_coaches_job_time, 'total_travel_time': all_coaches_travel_time,'input':best_input}
         simulations.append(new_simulation)
 
-    selected_simulation = max(simulations, key=lambda x: (-x['total_travel_time'],x['total_job_time']))
+    selected_simulation = max(simulations, key=lambda x: (x['total_job_time'],-x['total_travel_time']))
 
     curr_best = selected_simulation['input'].copy(deep=True)
     df_curr_day_programs = curr_best.copy(deep=True)
@@ -242,34 +304,55 @@ def convert(file):
                 last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
                 travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
                 times_to_reach_curr_program.append(travel_time_to_reach)
-                # print(coach,'B',second_filtered_coaches_curr_program,times_to_reach_curr_program)
-            else:
-                # print(coach,'Condition Matched coach has some shcedule already,second_filtered_coaches_curr_program,times_to_reach_curr_program)
 
+            else:
                 overlapping_time_windows = [tw for tw in coach_schedule if tw.start_time < row['End Time'] and row['Start Time'] < tw.end_time]
                 if len(overlapping_time_windows)>0:
                     continue
                 non_overlapping_time_windows = [tw for tw in coach_schedule if not (tw in overlapping_time_windows)]
                 start_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['Start Time'])
                 # Any Program before the current program that has been completed
-                time_window = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
-                if time_window:
-                    last_location_lat = time_window.latitude
-                    last_location_lon = time_window.longitude
-                    travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                    # print(travel_time_to_reach,(row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon))
-                    available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window.end_time)).total_seconds() / 60
-                    if available_time_to_reach >= travel_time_to_reach:
-                        second_filtered_coaches_curr_program.append(coach)
-                        times_to_reach_curr_program.append(travel_time_to_reach)
-                    # print(coach,'C',second_filtered_coaches_curr_program,times_to_reach_curr_program)
+                time_window_before = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
+                time_window_after = min((tw for tw in non_overlapping_time_windows if tw.start_time >= row['End Time']), default=None, key=lambda tw: (datetime.datetime.combine(datetime.datetime.today(), tw.start_time) - end_time_datetime).total_seconds())
+                if time_window_before:
+                    if time_window_after:
+                        last_location_lat = time_window_before.latitude
+                        last_location_lon = time_window_before.longitude
+                        next_location_lat = time_window_after.latitude
+                        next_location_lon = time_window_after.longitude
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                        available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                        available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                        if available_time_to_reach >= travel_time_to_reach and available_time_to_depart>=travel_time_to_depart:
+                            second_filtered_coaches_curr_program.append(coach)
+                            times_to_reach_curr_program.append(travel_time_to_reach)
+                    else:
+                        last_location_lat = time_window_before.latitude
+                        last_location_lon = time_window_before.longitude
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        available_time_to_reach = (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), time_window_before.end_time)).total_seconds() / 60
+                        if available_time_to_reach >= travel_time_to_reach:
+                            second_filtered_coaches_curr_program.append(coach)
+                            times_to_reach_curr_program.append(travel_time_to_reach)
                 else:
-                    second_filtered_coaches_curr_program.append(coach)
-                    last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
-                    last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
-                    travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
-                    times_to_reach_curr_program.append(travel_time_to_reach)
-                    # print(coach,'D',second_filtered_coaches_curr_program,times_to_reach_curr_program)            
+                    if time_window_after:
+                        next_location_lat = time_window_after.latitude
+                        next_location_lon = time_window_after.longitude
+                        travel_time_to_depart = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (next_location_lat, next_location_lon)))
+                        available_time_to_depart = (datetime.datetime.combine(datetime.datetime.today(), time_window_after.start_time) - end_time_datetime ).total_seconds() / 60
+                        if available_time_to_depart>=travel_time_to_depart:
+                            second_filtered_coaches_curr_program.append(coach)
+                            last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                            last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                            travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                            times_to_reach_curr_program.append(travel_time_to_reach)
+                    else:
+                        second_filtered_coaches_curr_program.append(coach)
+                        last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+                        last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+                        travel_time_to_reach = int(calculate_travel_time_in_minutes((row['Latitude'],row['Longitude']), (last_location_lat, last_location_lon)))
+                        times_to_reach_curr_program.append(travel_time_to_reach)          
         sorted_coaches_times_to_reach = sorted(zip(second_filtered_coaches_curr_program, times_to_reach_curr_program), key=lambda x: x[1])
 
         if sorted_coaches_times_to_reach:
