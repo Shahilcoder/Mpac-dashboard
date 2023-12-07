@@ -24,11 +24,13 @@ def calculate_travel_time_in_minutes(loc1, loc2):
     locs = [loc1, loc2]
     # Compute the distance matrix only for the two locations
     dist_matrix = cdist(locs, locs, metric=haversine)
-    dist_matrix = np.ceil(dist_matrix * 1.27).astype(int)  # Typecasting to int
+    dist_matrix = np.ceil(dist_matrix * 1.35).astype(int)  # Typecasting to int # PREVIOUSLY WAS 1.27
     # Compute the time matrix
     time_matrix = np.ceil(dist_matrix*1.13)     # taking average vehicle speed to be ~60/1.2 for a straight line traversal  
     time_matrix = time_matrix[0, 1]
     time_matrix = time_matrix if time_matrix <= 80 else int(time_matrix/1.3)
+    if time_matrix>0:
+        time_matrix+=30
     return time_matrix
 
 def replace_names_with_ids(name,name_to_coachid):
