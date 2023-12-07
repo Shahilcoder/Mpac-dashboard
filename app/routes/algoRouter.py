@@ -4,14 +4,14 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.utils import convert
 from app.utils.upload import upload_data_to_mongodb
 
-algo = Blueprint('algo', __name__, url_prefix='/algo')
+algoRouter = Blueprint('algoRouter', __name__, url_prefix='/algo')
 
-@algo.route("/", methods=("GET",))
+@algoRouter.route("/", methods=("GET",))
 @jwt_required()
 def index():
     return "Algorithm"
 
-@algo.route("/convert", methods=("POST",))
+@algoRouter.route("/convert", methods=("POST",))
 @jwt_required()
 def _convert():
     if 'input' not in request.files:
