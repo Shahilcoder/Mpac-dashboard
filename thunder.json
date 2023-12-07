@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "esra-be",
-    "dateExported": "2023-12-06T06:40:55.305Z",
+    "dateExported": "2023-12-07T16:51:08.356Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -66,7 +66,7 @@
             "method": "POST",
             "sortNum": 40000,
             "created": "2023-12-05T12:57:25.998Z",
-            "modified": "2023-12-05T13:03:14.684Z",
+            "modified": "2023-12-07T16:04:27.579Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -87,13 +87,54 @@
                 "files": [
                     {
                         "name": "input",
-                        "value": "e:\\Industry\\Blackcoffer\\Esra\\backend\\input.xlsx"
+                        "value": "e:\\Industry\\Blackcoffer\\Esra\\esra.xlsx"
                     }
                 ]
             },
             "auth": {
                 "type": "bearer",
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTc4MTA2OCwianRpIjoiMmVhYjI1NmQtNjBiZS00YjFiLWE1ZWEtZjhhNWIxM2EyODVjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE3ODEwNjgsImV4cCI6MTcwMTc5NTQ2OH0.2UDH_ewst-YXOwFMmu1xcl7EEoqdY1OZCbFgOHamInY"
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk1MjQxNywianRpIjoiYjEwMDc4NTctZThhOC00NDJhLThkZmYtZGU4MjdjNmJhNDY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NTI0MTcsImV4cCI6MTcwMTk2NjgxN30.wLY865umU9Tph1ag9-fv0ATLMKAoOH3fak14KAtgsnw"
+            },
+            "tests": []
+        },
+        {
+            "_id": "8069640d-1534-42a5-be09-6471028c4f92",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "edit coach",
+            "url": "http://localhost:5000/data/coach/update",
+            "method": "PUT",
+            "sortNum": 50000,
+            "created": "2023-12-07T15:50:07.681Z",
+            "modified": "2023-12-07T16:31:52.508Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"coach_id\": \"C0\",\n  \"coach_name\": \"Wallah Habibi\",\n  \"is_head\": true,\n  \"is_documented\": true,\n  \"is_fulltime\": false,\n  \"work_hours\": 9,\n  \"days_off\": [\"Mon\", \"Tue\", \"Wed\"],\n  \"age_group\": 1,\n  \"locations\": null,\n  \"visa_status\": \"Own Visa\",\n  \"has_transport\": false,\n  \"not_working_period\": [\"2023-12-12\", \"2024-01-12\"],\n  \"remarks\": \"Useless coach\",\n  \"remarks2\": \"Fire him\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk2NDY0OCwianRpIjoiZWQxY2ZiNDItZjAyNy00YzQ1LTlhOWUtM2Y5NWUxZWYwMDkwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NjQ2NDgsImV4cCI6MTcwMTk3OTA0OH0.4mgIR6OTHjiVG5jksRIstQVGvwax_j4_DskFvPe5CUw"
+            },
+            "tests": []
+        },
+        {
+            "_id": "4c54bcc9-2117-43f3-a94d-f3db4a872df4",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "delete coach",
+            "url": "http://localhost:5000/data/coach/delete/C1",
+            "method": "DELETE",
+            "sortNum": 60000,
+            "created": "2023-12-07T16:39:11.355Z",
+            "modified": "2023-12-07T16:42:30.860Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk2NDY0OCwianRpIjoiZWQxY2ZiNDItZjAyNy00YzQ1LTlhOWUtM2Y5NWUxZWYwMDkwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NjQ2NDgsImV4cCI6MTcwMTk3OTA0OH0.4mgIR6OTHjiVG5jksRIstQVGvwax_j4_DskFvPe5CUw"
             },
             "tests": []
         }
