@@ -28,13 +28,13 @@ def upload_data_to_mongodb(file):
     # coaches, locations, programs = get_dataframes_dicts(file)
     programs = pd.read_excel(file, sheet_name='Programs').to_dict(orient='records')
 
-    age_groups = db.age_groups.find()
-    levels = db.levels.find()
-    court_data = db.courts.find()
+    age_groups = list(db.age_groups.find(projection={'_id': False}))
+    levels = list(db.levels.find(projection={'_id': False}))
+    court_data = list(db.courts.find(projection={'_id': False}))
     # location_data, court_data = process_locations(locations, programs)
-    location_data = db.schools.find()
+    location_data = list(db.schools.find(projection={'_id': False}))
     # coach_data = process_coaches(coaches, location_data)
-    coach_data = db.coaches.find()
+    coach_data = list(db.coaches.find(projection={'_id': False}))
     program_data = process_programs(programs, court_data, age_groups, levels)
 
     # coaches_coll = db.coaches
