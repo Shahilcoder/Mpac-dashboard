@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "esra-be",
-    "dateExported": "2023-12-07T16:51:08.356Z",
+    "dateExported": "2023-12-08T16:22:05.764Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -66,7 +66,7 @@
             "method": "POST",
             "sortNum": 40000,
             "created": "2023-12-05T12:57:25.998Z",
-            "modified": "2023-12-07T16:04:27.579Z",
+            "modified": "2023-12-08T13:18:55.073Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -93,7 +93,7 @@
             },
             "auth": {
                 "type": "bearer",
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk1MjQxNywianRpIjoiYjEwMDc4NTctZThhOC00NDJhLThkZmYtZGU4MjdjNmJhNDY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NTI0MTcsImV4cCI6MTcwMTk2NjgxN30.wLY865umU9Tph1ag9-fv0ATLMKAoOH3fak14KAtgsnw"
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
             },
             "tests": []
         },
@@ -106,17 +106,17 @@
             "method": "PUT",
             "sortNum": 50000,
             "created": "2023-12-07T15:50:07.681Z",
-            "modified": "2023-12-07T16:31:52.508Z",
+            "modified": "2023-12-08T15:42:06.756Z",
             "headers": [],
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"coach_id\": \"C0\",\n  \"coach_name\": \"Wallah Habibi\",\n  \"is_head\": true,\n  \"is_documented\": true,\n  \"is_fulltime\": false,\n  \"work_hours\": 9,\n  \"days_off\": [\"Mon\", \"Tue\", \"Wed\"],\n  \"age_group\": 1,\n  \"locations\": null,\n  \"visa_status\": \"Own Visa\",\n  \"has_transport\": false,\n  \"not_working_period\": [\"2023-12-12\", \"2024-01-12\"],\n  \"remarks\": \"Useless coach\",\n  \"remarks2\": \"Fire him\"\n}",
+                "raw": "{\r\n  \"coach_id\": \"C1\",\r\n  \"coach_name\": \"Charles Yap\",\r\n  \"is_head\": true,\r\n  \"is_documented\": true,\r\n  \"is_fulltime\": true,\r\n  \"work_hours\": 9,\r\n  \"days_off\": [\r\n      \"Fri\"\r\n  ],\r\n  \"age_group\": 1,\r\n  \"locations\": null,\r\n  \"visa_status\": \"Our Visa\",\r\n  \"has_transport\": true,\r\n  \"not_working_period\": null,\r\n  \"remarks\": null,\r\n  \"remarks2\": \"Ages 2.5-5 years\"\r\n}",
                 "form": []
             },
             "auth": {
                 "type": "bearer",
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk2NDY0OCwianRpIjoiZWQxY2ZiNDItZjAyNy00YzQ1LTlhOWUtM2Y5NWUxZWYwMDkwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NjQ2NDgsImV4cCI6MTcwMTk3OTA0OH0.4mgIR6OTHjiVG5jksRIstQVGvwax_j4_DskFvPe5CUw"
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
             },
             "tests": []
         },
@@ -125,16 +125,167 @@
             "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
             "containerId": "",
             "name": "delete coach",
-            "url": "http://localhost:5000/data/coach/delete/C1",
+            "url": "http://localhost:5000/data/coach/delete/C0",
             "method": "DELETE",
             "sortNum": 60000,
             "created": "2023-12-07T16:39:11.355Z",
-            "modified": "2023-12-07T16:42:30.860Z",
+            "modified": "2023-12-08T15:43:30.870Z",
             "headers": [],
             "params": [],
             "auth": {
                 "type": "bearer",
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTk2NDY0OCwianRpIjoiZWQxY2ZiNDItZjAyNy00YzQ1LTlhOWUtM2Y5NWUxZWYwMDkwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDE5NjQ2NDgsImV4cCI6MTcwMTk3OTA0OH0.4mgIR6OTHjiVG5jksRIstQVGvwax_j4_DskFvPe5CUw"
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "3f399076-bd83-4960-a75a-12c25652dfa0",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "add coach",
+            "url": "http://localhost:5000/data/coach/add",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-12-08T15:46:34.341Z",
+            "modified": "2023-12-08T15:47:39.522Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"coach_name\": \"KOKO BAKA\",\n  \"is_head\": true,\n  \"is_documented\": true,\n  \"is_fulltime\": true,\n  \"work_hours\": 9,\n  \"days_off\": [\n      \"Fri\"\n  ],\n  \"age_group\": 1,\n  \"locations\": null,\n  \"visa_status\": \"Our Visa\",\n  \"has_transport\": true,\n  \"not_working_period\": null,\n  \"remarks\": null,\n  \"remarks2\": \"Ages 2.5-5 years\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "121204ac-a08c-47cd-a323-144cbdf2be5a",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "add court",
+            "url": "http://localhost:5000/data/court/add",
+            "method": "POST",
+            "sortNum": 75000,
+            "created": "2023-12-08T16:18:10.333Z",
+            "modified": "2023-12-08T16:19:51.959Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n    \"acronym\": \"SAHIL\",\r\n    \"name\": \"Court 3\"\r\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f0091662-8c9f-42a7-a6e4-255c8b1e4b07",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "update court",
+            "url": "http://localhost:5000/data/court/update",
+            "method": "PUT",
+            "sortNum": 77500,
+            "created": "2023-12-08T16:19:57.852Z",
+            "modified": "2023-12-08T16:20:23.228Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"acronym\": \"SAHIL\",\n    \"name\": \"Court 3\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "b2918f60-e1a1-499a-8b46-1da606739dc8",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "delete court",
+            "url": "http://localhost:5000/data/court/delete/SAHIL",
+            "method": "DELETE",
+            "sortNum": 78750,
+            "created": "2023-12-08T16:20:28.516Z",
+            "modified": "2023-12-08T16:20:58.973Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "0d18f1a0-e67f-4079-bbe4-3a6489cdfdd1",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "add school",
+            "url": "http://localhost:5000/data/school/add",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2023-12-08T16:11:09.087Z",
+            "modified": "2023-12-08T16:14:32.644Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n  \"acronym\": \"SAHIL KAKA\",\r\n  \"name\": \"MPAC Sports Centre Dubai\",\r\n  \"latitude\": 25.1378944998368,\r\n  \"longitude\": 55.2230484181347,\r\n  \"documented_coach\": false,\r\n  \"head_coaches\": [],\r\n  \"assistant_coaches\": [],\r\n  \"location\": \"Al Quoz\",\r\n  \"location_map\": \"bit.ly/3iuZBTU\",\r\n  \"courts\": [\r\n      \"C3\",\r\n      \"FC1\",\r\n      \"C2\",\r\n      \"C4\",\r\n      \"FC2\",\r\n      \"Out Trk\",\r\n      \"C1\"\r\n  ],\r\n  \"provider\": \"MPAC\",\r\n  \"storage\": \"Yes\",\r\n  \"stored\": \"Yes\",\r\n  \"special_location\": \"DXB\"\r\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "6cc81e39-52e7-4d26-805f-2dc641115cd8",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "update school",
+            "url": "http://localhost:5000/data/school/update",
+            "method": "PUT",
+            "sortNum": 90000,
+            "created": "2023-12-08T16:13:05.109Z",
+            "modified": "2023-12-08T16:13:41.887Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"acronym\": \"SAHIL\",\n  \"name\": \"MPAC Sports Centre Dubai\",\n  \"latitude\": 25.1378944998368,\n  \"longitude\": 55.2230484181347,\n  \"documented_coach\": false,\n  \"head_coaches\": [],\n  \"assistant_coaches\": [],\n  \"location\": \"Al Quoz\",\n  \"location_map\": \"bit.ly/3iuZBTU\",\n  \"courts\": [\n      \"C3\",\n      \"FC1\",\n      \"C2\",\n      \"C4\",\n      \"FC2\",\n      \"Out Trk\",\n      \"C1\"\n  ],\n  \"provider\": \"MPAC\",\n  \"storage\": \"Yes\",\n  \"stored\": \"Yes\",\n  \"special_location\": \"DXB\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
+            },
+            "tests": []
+        },
+        {
+            "_id": "90d8dc52-7c96-46a1-90b1-b409de4a9dee",
+            "colId": "d0accd0b-09f1-4534-aeae-b2cf4659b68a",
+            "containerId": "",
+            "name": "delete school",
+            "url": "http://localhost:5000/data/school/delete/SAHIL KAKA",
+            "method": "DELETE",
+            "sortNum": 100000,
+            "created": "2023-12-08T16:13:48.198Z",
+            "modified": "2023-12-08T16:14:39.030Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMjA0MTUyMSwianRpIjoiNTRjODg3MGEtNWU4Mi00MDk0LWI4M2YtY2MwN2Y5ZTU4ODA5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3MDIwNDE1MjEsImV4cCI6MTcwMjA1NTkyMX0.N0HJlFI4Mt1M4foGssXGqQNtaFCj9T3S0tLXUL23RN0"
             },
             "tests": []
         }
