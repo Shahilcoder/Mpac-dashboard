@@ -32,7 +32,9 @@ def upload_data_to_mongodb(file):
     levels = db.levels.find()
     court_data = db.courts.find()
     # location_data, court_data = process_locations(locations, programs)
+    location_data = db.schools.find()
     # coach_data = process_coaches(coaches, location_data)
+    coach_data = db.coaches.find()
     program_data = process_programs(programs, court_data, age_groups, levels)
 
     # coaches_coll = db.coaches
@@ -44,3 +46,5 @@ def upload_data_to_mongodb(file):
     # locations_coll.insert_many(location_data)
     # courts_coll.insert_many(court_data)
     programs_coll.insert_many(program_data)
+
+    return coach_data, location_data, program_data, age_groups, levels
