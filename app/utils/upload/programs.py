@@ -1,22 +1,5 @@
-"""
-Level
+from app.db import db
 
-id - integer
-level - string
-"""
-
-level_counter = 1
-
-levels = ['Toddlers', 'Beg', 'Int B', 'Int A', 'ML B', 'ML A', 'NL', 'Adult']
-
-level_data = []
-
-for level in levels:
-    level_data.append({
-        "id": level_counter,
-        "level": level
-    })
-    level_counter += 1
 
 def getCourtId(court_acronym, court_data):
         for court in court_data:
@@ -49,7 +32,21 @@ def getDateList(date_string):
     
     return date_arr
 
-def process_programs(programs, court_data):
+def getLevelId(level, levels):
+    for l in levels:
+        if l['level'] == level:
+            return l['id']
+    else:
+        return None
+
+def getAgeGroupId(age, ages):
+    for a in ages:
+        if a['age_group'] == age:
+            return a['id']
+    else:
+        return None
+
+def process_programs(programs, court_data, age_data, level_data):
     """
         Program
 
@@ -74,7 +71,7 @@ def process_programs(programs, court_data):
         term - string
     """
 
-    program_counter = 1
+    program_counter = db.programs.count_documents({}) + 1
     program_data = []
 
     for program in programs:
@@ -87,9 +84,9 @@ def process_programs(programs, court_data):
             "start_time": formatTime(program['Start Time']),
             "end_time": formatTime(program['End Time']),
             "name": program['Program'],
-            "level": "TODO",
+            "level": getLevelId(program["Level"], level_data),
             "class_type": program['Class Type'],
-            "age_group": "TODO",
+            "age_group": getAgeGroupId(program['Age Group'], age_data),
             "seat_capacity": program['Seat Capacity'],
             "seats_taken": program['Seats Taken'],
             "free_seats": program['Available Seats'],
