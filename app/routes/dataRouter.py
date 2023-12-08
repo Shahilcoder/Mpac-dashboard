@@ -5,19 +5,105 @@ from app.db import db
 
 dataRouter = Blueprint("data", __name__, url_prefix="/data")
 
+@dataRouter.route("/coach/add", methods=("POST",))
+@jwt_required()
+def add_coach():
+    payload = request.json
+
+    coach_coll = db.coaches
+    payload['coach_id'] = f"C{coach_coll.count_documents({}) + 1}"
+    coach_coll.insert_one(payload)
+
+    return jsonify(msg="Coach Added"), 201
+
 @dataRouter.route("/coach/update", methods=("PUT",))
 @jwt_required()
 def update_coach():
     payload = request.json
 
     coach_coll = db.coaches
-    coach_coll.update_one({'coach_id': payload['coach_id']}, {'$set': payload})
+    doc = coach_coll.find_one_and_update({'coach_id': payload['coach_id']}, {'$set': payload})
+    if doc is None:
+        return jsonify(msg="Coach not found"), 404
+
     return jsonify(msg="Coach Updated"), 200
 
 @dataRouter.route("/coach/delete/<coach_id>", methods=("DELETE",))
 @jwt_required()
 def delete_coach(coach_id):
     coach_coll = db.coaches
-    coach_coll.delete_one({'coach_id': coach_id})
+    doc = coach_coll.find_one_and_delete({'coach_id': coach_id})
+    if doc is None:
+        return jsonify(msg="Coach not found"), 404
 
     return jsonify(msg="Coach Deleted"), 200
+
+@dataRouter.route("/court/add", methods=("POST",))
+@jwt_required()
+def add_court():
+    payload = request.json
+
+    court_coll = db.courts
+    doc = court_coll.find_one({'acronym': payload['acronym']})
+    if doc is not None:
+        return jsonify(msg="Court already exists"), 403
+    
+    court_coll.insert_one(payload)
+    return jsonify(msg="Court Added"), 201
+
+@dataRouter.route("/court/update", methods=("PUT",))
+@jwt_required()
+def update_court():
+    payload = request.json
+
+    court_coll = db.courts
+    doc = court_coll.find_one_and_update({'acronym': payload['acronym']}, {"$set": payload})
+    if doc is None:
+        return jsonify(msg="Court not found"), 404
+
+    return jsonify(msg="Court Updated"), 200
+
+@dataRouter.route("/court/delete/<acronym>", methods=("DELETE",))
+@jwt_required()
+def delete_court(acronym):
+    court_coll = db.courts
+    doc = court_coll.find_one_and_delete({'acronym': acronym})
+    if doc is None:
+        return jsonify(msg="Court not found"), 404
+
+    return jsonify(msg="Court Deleted"), 200
+
+@dataRouter.route("/school/add", methods=("POST",))
+@jwt_required()
+def add_school():
+    payload = request.json
+
+    school_coll = db.schools
+    doc = school_coll.find_one({'acronym': payload['acronym']})
+    if doc is not None:
+        return jsonify(msg="School already exists"), 403
+    
+    school_coll.insert_one(payload)
+    return jsonify(msg="School Added"), 201
+
+@dataRouter.route("/school/update", methods=("PUT",))
+@jwt_required()
+def update_school():
+    payload = request.json
+
+    school_coll = db.schools
+    doc = school_coll.find_one_and_update({'acronym': payload['acronym']}, {"$set": payload})
+    if doc is None:
+        return jsonify(msg="School not found"), 404
+
+    return jsonify(msg="School Updated"), 200
+
+@dataRouter.route("/school/delete/<acronym>", methods=("DELETE",))
+@jwt_required()
+def delete_school(acronym):
+    school_coll = db.schools
+    doc = school_coll.find_one_and_delete({'acronym': acronym})
+    if doc is None:
+        return jsonify(msg="School not found"), 404
+
+    return jsonify(msg="School Deleted"), 200
