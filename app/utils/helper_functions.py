@@ -1,4 +1,10 @@
 import pandas as pd
+import sys, os, copy
+import requests, json
+import urllib.request
+import ast
+
+import datetime
 import numpy as np
 from haversine import haversine
 from scipy.spatial.distance import cdist
@@ -80,20 +86,39 @@ def get_latest_coach(row,df_history,name_to_coachid):
             return None
         else:
             latest_row = program_rows.sort_values('Dates', ascending=False).iloc[0]
-            if pd.isnull(latest_row['Coach ID']):
+            if pd.isnull(latest_row['Ref Coach']):
                 return None
             else:
-                coach_id = latest_row['Coach ID']
+                coach_id = latest_row['Ref Coach']
                 return coach_id
     else:
         return row['Coach ID']
+
+def get_travel_segments(events):
+    return zip(events[:-1], events[1:])
+def get_home_location(coach,df_coaches_profile):
+    last_location_lat = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Latitude'].iloc[0]
+    last_location_lon = df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Home Longitude'].iloc[0]
+    return (last_location_lat, last_location_lon)
+def get_travel_time_to_first_event(coach,coaches_curr_day_busy_schedule_dict,df_coaches_profile):
+    if coach in ['TBH','TBC']:
+        # print('oye')
+        return None
+    home_location = get_home_location(coach,df_coaches_profile)
+    events = coaches_curr_day_busy_schedule_dict.get(coach, [])
+    if events:
+        first_event_location = events[0].latitude, events[0].longitude
+        return calculate_travel_time_in_minutes(home_location, first_event_location)
+    else:
+        return None
 
 def get_times(group):
     # Combine start and end time into a tuple, and make a list of these
     times = list(zip(group['Start Time'], group['End Time']))
     return times
+    
 def get_event_time_location(group):
-    event = list(zip(group['Start Time'], group['End Time'],group['Latitude'],group['Longitude']))
+    event = list(zip(group['Start Time'], group['End Time'],group['Latitude'],group['Longitude'],group['Location Acronym'],group['Court Location Abbreviation']))
     return event
 
 def process_data(df_programs_schedule, df_locations_profile, df_coaches_profile):

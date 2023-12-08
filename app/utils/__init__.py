@@ -15,10 +15,6 @@ class Event:
         self.start_time = start_time
         self.end_time = end_time
 
-def get_event_time_location(group):
-    event = list(zip(group['Start Time'], group['End Time'],group['Latitude'],group['Longitude'],group['Location Acronym'],group['Court Location Abbreviation']))
-    return event
-
 def convert(file):
     # excel_file = request.files['file']
     current_date = datetime.date(2023,11,19)
@@ -41,12 +37,11 @@ def convert(file):
     final_df=final_df.drop(columns=['Coach'])
     final_df['Ref Coach']=final_df['Coach ID']
     final_df['Coach ID']=None
-    df_past_programs = final_df.loc[final_df['Dates']<pd.to_datetime(str(current_date))]
-    df_curr_day_programs = final_df[final_df['Dates']==str(current_date)]
 
-    df_curr_day_programs['Coach ID'] = df_curr_day_programs.apply(lambda row: get_latest_coach(row, df_past_programs,name_to_coachid), axis=1)
-    # grouped = df_curr_day_programs.groupby('Coach ID')
-    # coaches_curr_day_busy_schedule = grouped.apply(lambda row: sorted([Event('Program',start,end,lat,lon,loc_acr,court_loc) for start, end, lat,lon,loc_acr,court_loc in get_event_time_location(row)], key=lambda x: x.end_time))
+    df_past_programs = final_df.loc[final_df['Dates']<pd.to_datetime(str(current_date))]
+    # df_past_programs['Coach ID'] = df_past_programs['Ref Coach']
+    df_curr_day_programs_original = final_df[final_df['Dates']==str(current_date)]
+    # df_curr_day_programs_original['Coach ID'] = df_curr_day_programs_original.apply(lambda row: get_latest_coach(row, df_past_programs,name_to_coachid), axis=1)
 
     #CUSTOM ALGORTIHM START
     df_past_programs = final_df.loc[final_df['Dates']<pd.to_datetime(str(current_date))]
@@ -60,11 +55,20 @@ def convert(file):
     df_curr_day_programs['Travel Time for Suggested Coach'] = 0
     df_curr_day_programs['Total Time'] = 0
 
-    coach_travel_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-    coach_job_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-    coach_total_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
+    grouped = df_curr_day_programs.groupby('Coach ID')
+    coaches_curr_day_busy_schedule = grouped.apply(lambda row: sorted([Event('Program',start,end,lat,lon,loc_acr,court_loc) for start, end, lat,lon,loc_acr,court_loc in get_event_time_location(row)], key=lambda x: x.end_time))
+    coaches_curr_day_busy_schedule_dict = coaches_curr_day_busy_schedule.to_dict() if not coaches_curr_day_busy_schedule.empty else {}
+    travel_times = {coach: sum(calculate_travel_time_in_minutes((start_event.latitude,start_event.longitude), (end_event.latitude,end_event.longitude)) for start_event, end_event in get_travel_segments(events)) for coach, events in coaches_curr_day_busy_schedule_dict.items()}
+    travel_times_to_first_event = {coach: get_travel_time_to_first_event(coach, coaches_curr_day_busy_schedule_dict, df_coaches_profile) for coach in coaches_curr_day_busy_schedule_dict.keys()}
+    coach_travel_time_dict = {coach: (travel_times.get(coach, 0) or 0) + (travel_times_to_first_event.get(coach, 0) or 0) for coach in set(travel_times) | set(travel_times_to_first_event)}
+    curr_job_time = (df_curr_day_programs.groupby('Coach ID')['Job Time'].sum())
+    coach_job_time_dict = curr_job_time.to_dict()
+    coach_total_time_dict = {coach: travel_time + job_time for coach, travel_time, job_time in zip(coach_travel_time_dict.keys(), coach_travel_time_dict.values(), coach_job_time_dict.values())}
 
     for index,row in df_curr_day_programs.iterrows():
+        if not pd.isnull(row['Coach ID']):
+            continue
+        # print('Balle')
         second_filtered_coaches_curr_program = []
         times_to_reach_curr_program = []
         grouped = df_curr_day_programs.groupby('Coach ID')
@@ -148,9 +152,10 @@ def convert(file):
         df_curr_day_programs.loc[index, 'Total Time'] = (df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']) if len(sorted_times_to_reach)>0 else 0
         if df_curr_day_programs.loc[index, 'Coach ID']:
             coach_id = df_curr_day_programs.loc[index, 'Coach ID']
-            coach_travel_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
-            coach_job_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']
-            coach_total_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']+df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+            coach_travel_time_dict[coach_id] = coach_travel_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+            coach_job_time_dict[coach_id] = coach_job_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time']
+            coach_total_time_dict[coach_id] = coach_total_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+
         # if count==10:
         #     break
         # count+=1
@@ -171,11 +176,19 @@ def convert(file):
         df_curr_day_programs['Travel Time for Suggested Coach'] = 0
         df_curr_day_programs['Total Time'] = 0
 
-        coach_travel_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-        coach_job_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-        coach_total_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
+        grouped = df_curr_day_programs.groupby('Coach ID')
+        coaches_curr_day_busy_schedule = grouped.apply(lambda row: sorted([Event('Program',start,end,lat,lon,loc_acr,court_loc) for start, end, lat,lon,loc_acr,court_loc in get_event_time_location(row)], key=lambda x: x.end_time))
+        coaches_curr_day_busy_schedule_dict = coaches_curr_day_busy_schedule.to_dict() if not coaches_curr_day_busy_schedule.empty else {}
+        travel_times = {coach: sum(calculate_travel_time_in_minutes((start_event.latitude,start_event.longitude), (end_event.latitude,end_event.longitude)) for start_event, end_event in get_travel_segments(events)) for coach, events in coaches_curr_day_busy_schedule_dict.items()}
+        travel_times_to_first_event = {coach: get_travel_time_to_first_event(coach, coaches_curr_day_busy_schedule_dict, df_coaches_profile) for coach in coaches_curr_day_busy_schedule_dict.keys()}
+        coach_travel_time_dict = {coach: (travel_times.get(coach, 0) or 0) + (travel_times_to_first_event.get(coach, 0) or 0) for coach in set(travel_times) | set(travel_times_to_first_event)}
+        curr_job_time = (df_curr_day_programs.groupby('Coach ID')['Job Time'].sum())
+        coach_job_time_dict = curr_job_time.to_dict()
+        coach_total_time_dict = {coach: travel_time + job_time for coach, travel_time, job_time in zip(coach_travel_time_dict.keys(), coach_travel_time_dict.values(), coach_job_time_dict.values())}
 
         for index,row in df_curr_day_programs.iterrows():
+            if not pd.isnull(row['Coach ID']):
+                continue
             second_filtered_coaches_curr_program = []
             times_to_reach_curr_program = []
             grouped = df_curr_day_programs.groupby('Coach ID')
@@ -198,6 +211,7 @@ def convert(file):
                         continue
                     non_overlapping_time_windows = [tw for tw in coach_schedule if not (tw in overlapping_time_windows)]
                     start_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['Start Time'])
+                    end_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['End Time'])
                     # Any Program before the current program that has been completed
                     time_window_before = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
                     time_window_after = min((tw for tw in non_overlapping_time_windows if tw.start_time >= row['End Time']), default=None, key=lambda tw: (datetime.datetime.combine(datetime.datetime.today(), tw.start_time) - end_time_datetime).total_seconds())
@@ -258,9 +272,9 @@ def convert(file):
             df_curr_day_programs.loc[index, 'Total Time'] = (df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']) if len(sorted_times_to_reach)>0 else 0
             if df_curr_day_programs.loc[index, 'Coach ID']:
                 coach_id = df_curr_day_programs.loc[index, 'Coach ID']
-                coach_travel_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
-                coach_job_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']
-                coach_total_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']+df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+                coach_travel_time_dict[coach_id] = coach_travel_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+                coach_job_time_dict[coach_id] = coach_job_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time']
+                coach_total_time_dict[coach_id] = coach_total_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
             # if count==10:
             #     break
             # count+=1
@@ -270,8 +284,7 @@ def convert(file):
 
         new_simulation = {'total_job_time': all_coaches_job_time, 'total_travel_time': all_coaches_travel_time,'input':best_input}
         simulations.append(new_simulation)
-
-    selected_simulation = max(simulations, key=lambda x: (x['total_job_time'],-x['total_travel_time']))
+    selected_simulation = max(simulations, key=lambda x: (x['total_job_time']-x['total_travel_time']))
 
     curr_best = selected_simulation['input'].copy(deep=True)
     df_curr_day_programs = curr_best.copy(deep=True)
@@ -280,11 +293,20 @@ def convert(file):
     df_curr_day_programs['Travel Time for Suggested Coach'] = 0
     df_curr_day_programs['Total Time'] = 0
 
-    coach_travel_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-    coach_job_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
-    coach_total_time_dict = {coach_id: 0 for coach_id in df_coaches_profile['Coach ID']}
+    grouped = df_curr_day_programs.groupby('Coach ID')
+    coaches_curr_day_busy_schedule = grouped.apply(lambda row: sorted([Event('Program',start,end,lat,lon,loc_acr,court_loc) for start, end, lat,lon,loc_acr,court_loc in get_event_time_location(row)], key=lambda x: x.end_time))
+    coaches_curr_day_busy_schedule_dict = coaches_curr_day_busy_schedule.to_dict() if not coaches_curr_day_busy_schedule.empty else {}
+    travel_times = {coach: sum(calculate_travel_time_in_minutes((start_event.latitude,start_event.longitude), (end_event.latitude,end_event.longitude)) for start_event, end_event in get_travel_segments(events)) for coach, events in coaches_curr_day_busy_schedule_dict.items()}
+    travel_times_to_first_event = {coach: get_travel_time_to_first_event(coach, coaches_curr_day_busy_schedule_dict, df_coaches_profile) for coach in coaches_curr_day_busy_schedule_dict.keys()}
+    coach_travel_time_dict = {coach: (travel_times.get(coach, 0) or 0) + (travel_times_to_first_event.get(coach, 0) or 0) for coach in set(travel_times) | set(travel_times_to_first_event)}
+    curr_job_time = (df_curr_day_programs.groupby('Coach ID')['Job Time'].sum())
+    coach_job_time_dict = curr_job_time.to_dict()
+    coach_total_time_dict = {coach: travel_time + job_time for coach, travel_time, job_time in zip(coach_travel_time_dict.keys(), coach_travel_time_dict.values(), coach_job_time_dict.values())}
 
     for index,row in df_curr_day_programs.iterrows():
+        if not pd.isnull(row['Coach ID']):
+            continue
+        # print('Balle')
         second_filtered_coaches_curr_program = []
         times_to_reach_curr_program = []
         #Get coach's busy schedule of programs
@@ -294,7 +316,7 @@ def convert(file):
         preferred_coaches_curr_program = row['Filtered Head Coaches'].split(',')
         # random.shuffle(preferred_coaches_curr_program)
         for coach in preferred_coaches_curr_program:
-            if coach_total_time_dict.get(coach, 0)>(int(df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Hours of work'].iloc[0])-1)*60:
+            if df_coaches_total_minutes.get(coach, 0)>(int(df_coaches_profile.loc[df_coaches_profile['Coach ID'] == coach, 'Hours of work'].iloc[0])-1)*60:
                 continue
             # print(coach,'A')
             coach_schedule = coaches_curr_day_busy_schedule.get(coach, None)
@@ -311,6 +333,7 @@ def convert(file):
                     continue
                 non_overlapping_time_windows = [tw for tw in coach_schedule if not (tw in overlapping_time_windows)]
                 start_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['Start Time'])
+                end_time_datetime = datetime.datetime.combine(datetime.datetime.today(), row['End Time'])
                 # Any Program before the current program that has been completed
                 time_window_before = min((tw for tw in non_overlapping_time_windows if tw.end_time <= row['Start Time']), default=None, key=lambda tw: (start_time_datetime - datetime.datetime.combine(datetime.datetime.today(), tw.end_time)).total_seconds())
                 time_window_after = min((tw for tw in non_overlapping_time_windows if tw.start_time >= row['End Time']), default=None, key=lambda tw: (datetime.datetime.combine(datetime.datetime.today(), tw.start_time) - end_time_datetime).total_seconds())
@@ -368,9 +391,9 @@ def convert(file):
         df_curr_day_programs.loc[index, 'Total Time'] = (df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']) if len(sorted_times_to_reach)>0 else 0
         if df_curr_day_programs.loc[index, 'Coach ID']:
             coach_id = df_curr_day_programs.loc[index, 'Coach ID']
-            coach_travel_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
-            coach_job_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']
-            coach_total_time_dict[coach_id] += df_curr_day_programs.loc[index, 'Job Time']+df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+            coach_travel_time_dict[coach_id] = coach_travel_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
+            coach_job_time_dict[coach_id] = coach_job_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time']
+            coach_total_time_dict[coach_id] = coach_total_time_dict.get(coach_id, 0) + df_curr_day_programs.loc[index, 'Job Time'] + df_curr_day_programs.loc[index, 'Travel Time for Suggested Coach']
 
     all_coaches_total_time = sum(coach_total_time_dict.values())
     all_coaches_travel_time = sum(coach_travel_time_dict.values())

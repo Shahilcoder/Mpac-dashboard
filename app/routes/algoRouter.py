@@ -17,6 +17,6 @@ def _convert():
     if 'input' not in request.files:
         return "no file provided"
     file = request.files['input']
-    upload_data_to_mongodb(file)
-    return "Upload successfull"
-    # return convert(file)
+    # upload_data_to_mongodb(file)
+    # return "Upload successfull"
+    return convert(file)
