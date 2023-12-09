@@ -33,6 +33,7 @@ def getLevelId(level, levels):
         return None
 
 def getAgeGroupId(age, ages):
+    age = age.replace(' ', '')
     for a in ages:
         if a['age_group'] == age:
             return a['id']
