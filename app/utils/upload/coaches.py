@@ -88,6 +88,8 @@ def process_coaches(coaches, location_data):
         days_off - list(str)
         age_group - reference
         locations - reference
+        home_lat = float
+        home_long = float
         visa_status - string
         has_transport - boolean
         not_working_period - [date, date]
@@ -108,6 +110,8 @@ def process_coaches(coaches, location_data):
             "days_off": getDaysoff(coach['Days Off']),
             "age_group": getAgeGroup(coach['Age Group']),
             "locations": getLocationIds(coach['Locations'], location_data),
+            "home_lat": coach['Home Latitude'],
+            "home_long": coach['Home Longitude'],
             "visa_status": coach['Visa StaTus'],
             "has_transport": True if coach['Transport'] == "Own Transport" else False,
             "not_working_period": getNotWorkingPeriod(coach['Period Not contracted to work']),

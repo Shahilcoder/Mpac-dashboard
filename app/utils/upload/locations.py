@@ -4,16 +4,17 @@ def cleanNAN(data):
     return data
 
 def correctAcronym(acronym):
-    if acronym == "FC 1":
-        return "FC1"
-    elif acronym == "FC 2":
-        return "FC2"
-    elif acronym == "MPH 1":
-        return "MPH1"
-    elif acronym == "MPH 2":
-        return "MPH2"
-    else:
-        return acronym
+    # if acronym == "FC 1":
+    #     return "FC1"
+    # elif acronym == "FC 2":
+    #     return "FC2"
+    # elif acronym == "MPH 1":
+    #     return "MPH1"
+    # elif acronym == "MPH 2":
+    #     return "MPH2"
+    # else:
+    #     return acronym
+    return acronym
 
 def findCourtWithAcronym(acronym, programs):
     for program in programs:
@@ -51,6 +52,16 @@ def getSchoolCourtIds(acronym, programs):
     
     return list(court_ids)
 
+def getCoachList(coaches_string):
+    coach_ids = []
+
+    coaches = coaches_string.split(",")
+    for coach in coaches:
+        number = int(coach.strip()[1:]) - 100
+        coach_ids.append(f"C{number}")
+    
+    return coach_ids
+
 def process_locations(locations, programs):
     """
         School/Locations
@@ -81,8 +92,8 @@ def process_locations(locations, programs):
             "latitude": location['Latitude'],
             "longitude": location['Longitude'],
             "documented_coach": True if location['Document Status'] == "Documented" else False,
-            "head_coaches": [],
-            "assistant_coaches": [],
+            "head_coaches": getCoachList(location['Allowed Head Coaches']),
+            "assistant_coaches": getCoachList(location['Allowed Assistant Coaches']),
             "location": location['Location'],
             "location_map": location['Location Map'],
             "courts": getSchoolCourtIds(location['Code'], programs),

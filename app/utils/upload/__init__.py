@@ -1,3 +1,5 @@
+# import json
+
 import pandas as pd
 
 from app.db import db
@@ -35,7 +37,13 @@ def upload_data_to_mongodb(file):
     location_data = list(db.schools.find(projection={'_id': False}))
     # coach_data = process_coaches(coaches, location_data)
     coach_data = list(db.coaches.find(projection={'_id': False}))
-    program_data = process_programs(programs, court_data, age_groups, levels)
+    program_data = process_programs(programs, age_groups, levels)
+
+    # datas = {"age_groups": age_groups, "levels": levels, "courts": court_data, "locations": location_data, "coaches": coach_data, "programs": program_data}
+
+    # for key, data in datas.items():
+    #     with open(f"{key}.json", "w") as file:
+    #         json.dump(data, file)
 
     # coaches_coll = db.coaches
     # locations_coll = db.schools
@@ -47,4 +55,13 @@ def upload_data_to_mongodb(file):
     # courts_coll.insert_many(court_data)
     programs_coll.insert_many(program_data)
 
-    return coach_data, location_data, program_data, age_groups, levels
+    return coach_data, location_data, court_data, program_data, age_groups, levels
+
+def upload_algorithm_output(programs):
+    """
+        uploads the output given by the algorithm into mongodb
+        @input
+        programs: list of dictonaries of programs updated with coach assigned
+    """
+    for program in programs:
+        db.programs.find_one_and_update({{'program_id': program['program_id']}, {"$set": program}})

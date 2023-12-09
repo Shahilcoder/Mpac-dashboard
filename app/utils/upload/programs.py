@@ -1,13 +1,6 @@
 from app.db import db
 
 
-def getCourtId(court_acronym, court_data):
-        for court in court_data:
-            if court['acronym'] == court_acronym:
-                return court['acronym']
-        else:
-            return None
-
 def formatDate(date_string):
     if type(date_string) == str:
         items = date_string.split('-')
@@ -46,11 +39,12 @@ def getAgeGroupId(age, ages):
     else:
         return None
 
-def process_programs(programs, court_data, age_data, level_data):
+def process_programs(programs, age_data, level_data):
     """
         Program
 
         program_id - integer
+        school - reference
         court - reference
         suggested_coaches - reference[]
         assigned_coaches - reference[]
@@ -72,12 +66,14 @@ def process_programs(programs, court_data, age_data, level_data):
     """
 
     program_counter = db.programs.count_documents({}) + 1
+    # program_counter = 1
     program_data = []
 
     for program in programs:
         program_data.append({
             "program_id": f'P{program_counter}',
-            "court": getCourtId(program['Court Location Abbreviation'], court_data),
+            "school": program['Location Acronym'],
+            "court": program['Court Location Abbreviation'],
             "suggested_coaches": [],
             "assigned_coaches": None,
             "day": program['Days'],
