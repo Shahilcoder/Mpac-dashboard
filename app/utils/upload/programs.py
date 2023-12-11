@@ -48,7 +48,7 @@ def process_programs(programs, age_data, level_data):
         school - reference
         court - reference
         suggested_coaches - reference[]
-        assigned_coaches - reference[]
+        assigned_coach - reference
         day - string
         start_time - time
         end_time - time
@@ -76,7 +76,7 @@ def process_programs(programs, age_data, level_data):
             "school": program['Location Acronym'],
             "court": program['Court Location Abbreviation'],
             "suggested_coaches": [],
-            "assigned_coaches": None,
+            "assigned_coach": None,
             "day": program['Days'],
             "start_time": formatTime(program['Start Time']),
             "end_time": formatTime(program['End Time']),
