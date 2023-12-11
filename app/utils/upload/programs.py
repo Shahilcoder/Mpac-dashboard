@@ -52,7 +52,7 @@ def process_programs(programs, age_data, level_data):
         day - string
         start_time - time
         end_time - time
-        name - string
+        program_name - string
         level - reference
         class_type - string
         age_group - reference
@@ -80,7 +80,7 @@ def process_programs(programs, age_data, level_data):
             "day": program['Days'],
             "start_time": formatTime(program['Start Time']),
             "end_time": formatTime(program['End Time']),
-            "name": program['Program'],
+            "program_name": program['Program'],
             "level": getLevelId(program["Level"], level_data),
             "class_type": program['Class Type'],
             "age_group": getAgeGroupId(program['Age Group'], age_data),
