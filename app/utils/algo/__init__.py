@@ -372,6 +372,11 @@ def convert(coaches, locations, programs):
     all_coaches_travel_time = sum(coach_travel_time_dict.values())
     all_coaches_job_time = sum(coach_job_time_dict.values())
 
-    output_csv = df_curr_day_programs.to_csv(index=False)
+    # transform the output data into required structure
+    algo_output = df_curr_day_programs.to_dict(orient='records')
 
-    return output_csv
+    for i in range(len(algo_output)):
+        item = algo_output[i]
+        programs[i]["assigned_coach"] = item["assigned_coach"]
+
+    return programs

@@ -13,7 +13,7 @@ def get_coaches():
     if len(coaches) == 0:
         return jsonify(msg="Coaches not found"), 404
 
-    return jsonify(coaches=coaches)
+    return jsonify(coaches=coaches), 200
 
 @dataRouter.route("/coach/add", methods=("POST",))
 @jwt_required()
@@ -56,7 +56,7 @@ def get_courts():
     if len(courts) == 0:
         return jsonify(msg="Courts not found"), 404
 
-    return jsonify(courts=courts)
+    return jsonify(courts=courts), 200
 
 @dataRouter.route("/court/add", methods=("POST",))
 @jwt_required()
@@ -101,7 +101,7 @@ def get_schools():
     if len(schools) == 0:
         return jsonify(msg="Schools not found"), 404
 
-    return jsonify(schools=schools)
+    return jsonify(schools=schools), 200
 
 @dataRouter.route("/school/add", methods=("POST",))
 @jwt_required()
@@ -137,3 +137,13 @@ def delete_school(acronym):
         return jsonify(msg="School not found"), 404
 
     return jsonify(msg="School Deleted"), 200
+
+@dataRouter.route("/program/all", methods=("GET",))
+@jwt_required()
+def get_programs():
+    program_coll = db.programs
+    programs = list(program_coll.find(projection={'_id': False}))
+    if len(programs) == 0:
+        return jsonify(msg="Schools not found"), 404
+
+    return jsonify(programs=programs), 200

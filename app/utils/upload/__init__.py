@@ -6,5 +6,4 @@ def upload_algorithm_output(programs):
         @input
         programs: list of dictonaries of programs updated with coach assigned
     """
-    for program in programs:
-        db.programs.find_one_and_update({{'program_id': program['program_id']}, {"$set": program}})
+    db.programs.insert_many(programs)
