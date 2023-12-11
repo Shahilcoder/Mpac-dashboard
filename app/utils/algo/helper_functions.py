@@ -267,19 +267,19 @@ def process_data(df_programs_schedule, df_locations_profile, df_coaches_profile)
 
 
 def get_latest_coach(row,df_history,name_to_coachid):
-    if pd.isnull(row['assigned_coaches']):
+    if pd.isnull(row['assigned_coach']):
         program_rows = df_history[df_history['program_id'] == row['program_id']]
         if program_rows.empty:
             return None
         else:
             latest_row = program_rows.sort_values('dates', ascending=False).iloc[0]
-            if pd.isnull(latest_row['assigned_coaches']):
+            if pd.isnull(latest_row['assigned_coach']):
                 return None
             else:
-                coach_id = latest_row['assigned_coaches']
+                coach_id = latest_row['assigned_coach']
                 return coach_id
     else:
-        return row['assigned_coaches']
+        return row['assigned_coach']
 
 def get_travel_segments(events):
     return zip(events[:-1], events[1:])
@@ -326,13 +326,13 @@ def process_data2(df_programs_schedule, df_locations_profile, df_coaches_profile
     df_programs = process_programs_schedule2(df_programs_schedule)
     merged_df = df_programs.merge(df_locations_profile, left_on='school', right_on='acronym', how='left')
     all_columns_after_merge = ['program_id', 'school', 'court', 'suggested_coaches',
-       'assigned_coaches', 'day', 'start_time', 'end_time', 'name_x', 'level',
+       'assigned_coach', 'day', 'start_time', 'end_time', 'name_x', 'level',
        'class_type', 'age_group', 'seat_capacity', 'seats_taken', 'free_seats',
        'start_date', 'end_date', 'weeks', 'dates_no_session', 'term', 'dates',
        'acronym', 'name_y', 'latitude', 'longitude', 'documented_coach',
        'head_coaches', 'assistant_coaches', 'location', 'location_map',
        'courts', 'provider', 'storage', 'stored', 'special_location']
-    imp_columns_after_merge = ['program_id','school','court','latitude','longitude','dates','day','start_time', 'end_time','age_group','level','seats_taken','head_coaches','assistant_coaches','assigned_coaches']
+    imp_columns_after_merge = ['program_id','school','court','latitude','longitude','dates','day','start_time', 'end_time','age_group','level','seats_taken','head_coaches','assistant_coaches','assigned_coach']
     final_df = merged_df[imp_columns_after_merge]
 
     # Calculate Start and End times, Job durations for programs and make their columns

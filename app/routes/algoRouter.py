@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from app.utils import convert
-from app.utils.upload import upload_data_to_mongodb
+from app.utils.algo import convert
+from app.utils.upload.helpers import process_excel_file_into_dictlist
 
 algoRouter = Blueprint('algoRouter', __name__, url_prefix='/algo')
 
@@ -17,6 +17,6 @@ def _convert():
     if 'input' not in request.files:
         return "no file provided"
     file = request.files['input']
-    # upload_data_to_mongodb(file)
+    coaches, locations, programs = process_excel_file_into_dictlist(file)
+    return convert(coaches, locations, programs)
     # return "Upload successfull"
-    return convert(file)
