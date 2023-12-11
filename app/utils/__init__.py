@@ -32,7 +32,7 @@ def convert(file):
     name_to_coachid = df_coaches_profile.set_index('coach_name')['coach_id'].to_dict()
 
     final_df['assigned_coaches']=final_df['assigned_coaches'].apply(convert_coach_name)
-    final_df['assigned_coaches'] = final_df['assigned_coaches'].apply(lambda names: [replace_names_with_ids(name, name_to_coachid) for name in names] if not pd.isnull(names) else None)    final_df=final_df.drop(columns=['Coach'])
+    final_df['assigned_coaches'] = final_df['assigned_coaches'].apply(lambda names: [replace_names_with_ids(name, name_to_coachid) for name in names] if not pd.isnull(names) else None)
 
     df_past_programs = final_df.loc[final_df['dates']<pd.to_datetime(str(current_date))]
     # df_past_programs['Coach ID'] = df_past_programs['Ref Coach']df_curr_day_programs_original = final_df[final_df['Dates']==str(current_date)]
